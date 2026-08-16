@@ -1,0 +1,27 @@
+# Java / Maven
+**/target/
+**/.classpath
+**/.project
+**/.settings/
+**/.factorypath
+
+# Node / Next.js
+**/node_modules/
+**/.next/
+**/out/
+**/coverage/
+
+# Environment
+.env
+.env.*
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

@@ -1,0 +1,6 @@
+ye\gov\pmo\news\service\NewsService.class
+ye\gov\pmo\news\controller\AnnouncementController.class
+ye\gov\pmo\news\controller\NewsController.class
+ye\gov\pmo\news\dto\AnnouncementResponse.class
+ye\gov\pmo\news\dto\NewsArticleResponse.class
+ye\gov\pmo\news\service\AnnouncementService.class
