@@ -57,14 +57,16 @@ export type PortalHomeContent = {
 
 export const navItems: NavItem[] = [
   { label: "الرئيسية", href: "/" },
-  { label: "الأخبار", href: "#news" },
-  { label: "الإعلانات", href: "#announcements" },
-  { label: "البيانات", href: "#statements" },
-  { label: "القرارات", href: "#decisions" },
-  { label: "الخدمات", href: "#services" },
-  { label: "الوثائق", href: "#documents" },
+  { label: "من نحن", href: "/about" },
+  { label: "الأخبار", href: "/#news" },
+  { label: "الإعلانات", href: "/#announcements" },
+  { label: "البيانات", href: "/#statements" },
+  { label: "القرارات", href: "/#decisions" },
+  { label: "الخدمات", href: "/services" },
+  { label: "الاستفسارات", href: "/complaints" },
+  { label: "الوثائق", href: "/#documents" },
   { label: "الإدارة", href: "/admin" },
-  { label: "تواصل معنا", href: "#contact" }
+  { label: "تواصل معنا", href: "/contact" }
 ];
 
 export const heroStory: HeroStory = {

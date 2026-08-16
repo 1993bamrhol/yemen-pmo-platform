@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication(scanBasePackages = "ye.gov.pmo")
-@EntityScan(basePackages = "ye.gov.pmo.identity.entity")
-@EnableJpaRepositories(basePackages = "ye.gov.pmo.identity.repository")
+@EntityScan(basePackages = {"ye.gov.pmo.identity.entity", "ye.gov.pmo.bootstrap.entity"})
+@EnableJpaRepositories(basePackages = {"ye.gov.pmo.identity.repository", "ye.gov.pmo.bootstrap.repository"})
 public class BootstrapApplication {
 
     public static void main(String[] args) {

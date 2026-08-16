@@ -35,9 +35,9 @@ export function Header() {
           <button className="search-button" type="button">
             بحث
           </button>
-          <a className="button button--primary button--compact" href="#contact">
+          <Link className="button button--primary button--compact" href="/contact">
             تواصل
-          </a>
+          </Link>
         </div>
       </div>
     </header>

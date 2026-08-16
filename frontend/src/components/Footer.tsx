@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function Footer() {
   return (
     <footer className="footer">
@@ -9,9 +11,9 @@ export function Footer() {
         <div>
           <h4>روابط سريعة</h4>
           <ul>
-            <li>الأخبار</li>
-            <li>البيانات الرسمية</li>
-            <li>القرارات والتعاميم</li>
+            <li><Link href="/">الرئيسية</Link></li>
+            <li><Link href="/services">الخدمات</Link></li>
+            <li><Link href="/contact">تواصل معنا</Link></li>
           </ul>
         </div>
         <div id="contact">

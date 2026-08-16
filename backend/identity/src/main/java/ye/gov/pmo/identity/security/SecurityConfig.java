@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/api/portal/**", "/api/news/**", "/api/announcements/**", "/api/decisions/**", "/api/documents/**", "/actuator/**", "/h2-console/**", "/", "/health").permitAll()
+                                        .requestMatchers("/api/auth/**", "/api/portal/**", "/api/news/**", "/api/announcements/**", "/api/decisions/**", "/api/documents/**", "/api/support/requests", "/actuator/**", "/h2-console/**", "/", "/health").permitAll()
                         .requestMatchers("/api/admin/**").authenticated()
                         .anyRequest().authenticated())
                 .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))

@@ -2,35 +2,47 @@ services:
   database:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: yemen_pmo
-      POSTGRES_USER: yemen_pmo
-      POSTGRES_PASSWORD: yemen_pmo
+      POSTGRES_DB: ${POSTGRES_DB:-yemen_pmo}
+      POSTGRES_USER: ${POSTGRES_USER:-yemen_pmo}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-yemen_pmo} -d ${POSTGRES_DB:-yemen_pmo}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
 
   backend:
     build:
       context: ./backend
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/yemen_pmo
-      SPRING_DATASOURCE_USERNAME: yemen_pmo
-      SPRING_DATASOURCE_PASSWORD: yemen_pmo
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:-jdbc:postgresql://database:5432/yemen_pmo}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-yemen_pmo}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-change_me}
+      SECURITY_JWT_SECRET: ${SECURITY_JWT_SECRET:-ZmFrZS1zZWNyZXQtZm9yLXllbWVuLXBtby1wbGF0Zm9ybS0xMjM0NTY3ODkw}
+      SECURITY_JWT_EXPIRATION_MS: ${SECURITY_JWT_EXPIRATION_MS:-86400000}
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     ports:
       - "8080:8080"
+    restart: unless-stopped
 
   frontend:
     build:
       context: ./frontend
     environment:
-      NEXT_PUBLIC_API_BASE_URL: http://backend:8080
+      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8080}
     depends_on:
       - backend
     ports:
       - "3000:3000"
+    restart: unless-stopped
 
 volumes:
   postgres_data:
