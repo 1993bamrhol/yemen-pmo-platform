@@ -8,8 +8,8 @@ import { setStoredAuthToken } from "@/lib/auth";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [username, setUsername] = useState("admin");
-  const [password, setPassword] = useState("Admin@123");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -44,7 +44,8 @@ export default function LoginPage() {
             <input
               value={username}
               onChange={(event) => setUsername(event.target.value)}
-              placeholder="admin"
+              autoComplete="username"
+              required
               style={{ padding: "12px 14px", borderRadius: "10px", border: "1px solid #d0d5dd" }}
             />
           </label>
@@ -55,7 +56,8 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              placeholder="Admin@123"
+              autoComplete="current-password"
+              required
               style={{ padding: "12px 14px", borderRadius: "10px", border: "1px solid #d0d5dd" }}
             />
           </label>

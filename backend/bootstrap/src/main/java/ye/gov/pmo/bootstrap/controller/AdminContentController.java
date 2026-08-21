@@ -3,6 +3,7 @@ package ye.gov.pmo.bootstrap.controller;
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import ye.gov.pmo.bootstrap.entity.ContentItem;
 import ye.gov.pmo.bootstrap.repository.AdminContentRepository;
 
@@ -27,6 +31,7 @@ public class AdminContentController {
     }
 
     @GetMapping("/content")
+    @PreAuthorize("hasAuthority('content.read')")
     public List<ContentItemResponse> getContent() {
         return contentRepository.findAll(Sort.by(Sort.Direction.DESC, "updatedAt")).stream()
                .map(this::toResponse)
@@ -34,6 +39,7 @@ public class AdminContentController {
     }
 
     @GetMapping("/content/summary")
+    @PreAuthorize("hasAuthority('content.read')")
     public ContentSummary getSummary() {
         List<ContentItem> items = contentRepository.findAll();
         long total = items.size();
@@ -44,14 +50,16 @@ public class AdminContentController {
     }
 
     @GetMapping("/content/{id}")
+    @PreAuthorize("hasAuthority('content.read')")
     public ContentItemResponse getById(@PathVariable("id") Long id) {
         return toResponse(contentRepository.findById(id)
                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Content item not found with id: " + id)));
     }
 
     @PostMapping("/content")
+    @PreAuthorize("hasAuthority('content.write')")
     @ResponseStatus(HttpStatus.CREATED)
-    public ContentItemResponse create(@RequestBody ContentRequest request) {
+    public ContentItemResponse create(@Valid @RequestBody ContentRequest request) {
         ContentItem item = new ContentItem(
                normalizeType(request.type()),
                request.title(),
@@ -62,7 +70,8 @@ public class AdminContentController {
     }
 
     @PutMapping("/content/{id}")
-    public ContentItemResponse update(@PathVariable("id") Long id, @RequestBody ContentRequest request) {
+    @PreAuthorize("hasAuthority('content.write')")
+    public ContentItemResponse update(@PathVariable("id") Long id, @Valid @RequestBody ContentRequest request) {
         ContentItem existing = contentRepository.findById(id)
                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Content item not found with id: " + id));
 
@@ -76,6 +85,7 @@ public class AdminContentController {
     }
 
     @DeleteMapping("/content/{id}")
+    @PreAuthorize("hasAuthority('content.manage')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") Long id) {
         if (!contentRepository.existsById(id)) {
@@ -113,11 +123,11 @@ public class AdminContentController {
     }
 
     public record ContentRequest(
-            String type,
-            String title,
-            String status,
-            String author,
-            String category) {
+            @NotBlank @Size(max = 50) String type,
+            @NotBlank @Size(max = 255) String title,
+            @NotBlank @Size(max = 50) String status,
+            @NotBlank @Size(max = 120) String author,
+            @NotBlank @Size(max = 120) String category) {
     }
 
     public record ContentItemResponse(

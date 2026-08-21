@@ -1,11 +1,10 @@
 package ye.gov.pmo.identity.security;
 
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.Base64;
 import java.util.Date;
-import java.util.Set;
 import java.util.stream.Collectors;
+
+import javax.crypto.SecretKey;
 
 import ye.gov.pmo.identity.entity.Permission;
 import ye.gov.pmo.identity.entity.Role;
@@ -15,18 +14,48 @@ import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.io.DecodingException;
 import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
 
-    @Value("${security.jwt.secret:ZmFrZS1zZWNyZXQtZm9yLXllbWVuLXBtby1wbGF0Zm9ybS0xMjM0NTY3ODkw}")
-    private String secret;
+    private final SecretKey signingKey;
+    private final long expirationMs;
 
-    @Value("${security.jwt.expiration-ms:86400000}")
-    private long expirationMs;
+    public JwtService(
+            @Value("${security.jwt.secret}") String secret,
+            @Value("${security.jwt.expiration-ms:86400000}") long expirationMs) {
+
+        if (secret == null || secret.isBlank()) {
+            throw new IllegalStateException("SECURITY_JWT_SECRET must be configured");
+        }
+
+        byte[] decodedSecret = decodeSecret(secret);
+        if (decodedSecret.length < 32) {
+            throw new IllegalStateException("SECURITY_JWT_SECRET must decode to at least 32 bytes");
+        }
+        this.signingKey = Keys.hmacShaKeyFor(decodedSecret);
+
+        if (expirationMs <= 0) {
+            throw new IllegalStateException("SECURITY_JWT_EXPIRATION_MS must be greater than zero");
+        }
+        this.expirationMs = expirationMs;
+    }
+
+    private byte[] decodeSecret(String secret) {
+        boolean usesBase64UrlAlphabet = secret.indexOf('-') >= 0 || secret.indexOf('_') >= 0;
+        try {
+            return usesBase64UrlAlphabet
+                    ? Decoders.BASE64URL.decode(secret)
+                    : Decoders.BASE64.decode(secret);
+        } catch (DecodingException exception) {
+            throw new IllegalStateException(
+                    "SECURITY_JWT_SECRET must be valid Base64 or Base64URL",
+                    exception);
+        }
+    }
 
     public String generateToken(User user) {
         Instant now = Instant.now();
@@ -42,7 +71,7 @@ public class JwtService {
                         .flatMap(role -> role.getPermissions().stream())
                         .map(Permission::getName)
                         .collect(Collectors.toSet()))
-                .signWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret)), SignatureAlgorithm.HS256)
+                .signWith(signingKey)
                 .compact();
     }
 
@@ -57,7 +86,7 @@ public class JwtService {
 
     private Claims getClaims(String token) {
         return Jwts.parser()
-                .verifyWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret)))
+                .verifyWith(signingKey)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();

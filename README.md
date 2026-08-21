@@ -20,6 +20,9 @@ This repository contains a government portal platform for Yemen with an Arabic-f
    - `POSTGRES_PASSWORD`
    - `SPRING_DATASOURCE_PASSWORD`
    - `SECURITY_JWT_SECRET`
+   - `ADMIN_PASSWORD`
+   - `APP_CORS_ALLOWED_ORIGINS`
+   The JWT secret must be Base64- or Base64URL-encoded and decode to at least 32 random bytes.
 3. Start the full stack:
    - `docker compose up --build`
 4. Access the app:
@@ -27,14 +30,17 @@ This repository contains a government portal platform for Yemen with an Arabic-f
    - Backend API: http://localhost:8080
    - PostgreSQL: localhost:5432
 
-## Default admin credentials
-- Username: `admin`
-- Password: `Admin@123`
+## Initial administrator
+- The username defaults to `admin` and can be changed with `ADMIN_USERNAME`.
+- There is no default password. Set a strong, unique `ADMIN_PASSWORD` before the first start.
+- The password is used only when the administrator is created; changing the environment variable does not reset an existing account.
 
 ## Production checklist
 - Use a strong JWT secret and unique DB credentials.
+- Restrict `APP_CORS_ALLOWED_ORIGINS` to the exact deployed frontend origin.
 - Keep environment variables outside the source repository.
 - Run database migrations automatically through Flyway.
+- Terminate TLS at the reverse proxy and expose only the frontend and required API routes.
 - Prefer a real Docker-enabled host for final runtime validation.
 
 ## Notes

@@ -9,23 +9,24 @@ export default async function NewsDetailPage({
 }) {
   const { id } = await params;
   const articleId = Number(id);
+  let article;
 
   try {
-    const article = await api.getNewsById(articleId);
-
-    return (
-      <main className="container section">
-        <Link href="/" className="button button--secondary">
-          العودة للرئيسية
-        </Link>
-        <article className="list-card" style={{ marginTop: "24px" }}>
-          <span className="card__meta">{article.category} · {article.date}</span>
-          <h1 style={{ margin: "12px 0" }}>{article.title}</h1>
-          <p>{article.excerpt}</p>
-        </article>
-      </main>
-    );
+    article = await api.getNewsById(articleId);
   } catch {
     notFound();
   }
+
+  return (
+    <main className="container section">
+      <Link href="/" className="button button--secondary">
+        العودة للرئيسية
+      </Link>
+      <article className="list-card" style={{ marginTop: "24px" }}>
+        <span className="card__meta">{article.category} · {article.date}</span>
+        <h1 style={{ margin: "12px 0" }}>{article.title}</h1>
+        <p>{article.excerpt}</p>
+      </article>
+    </main>
+  );
 }

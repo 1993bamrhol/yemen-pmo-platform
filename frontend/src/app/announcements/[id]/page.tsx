@@ -9,23 +9,24 @@ export default async function AnnouncementDetailPage({
 }) {
   const { id } = await params;
   const itemId = Number(id);
+  let announcement;
 
   try {
-    const announcement = await api.getAnnouncementById(itemId);
-
-    return (
-      <main className="container section">
-        <Link href="/" className="button button--secondary">
-          العودة للرئيسية
-        </Link>
-        <article className="list-card" style={{ marginTop: "24px" }}>
-          <span className="card__meta">{announcement.category} · {announcement.date}</span>
-          <h1 style={{ margin: "12px 0" }}>{announcement.title}</h1>
-          <p>{announcement.excerpt}</p>
-        </article>
-      </main>
-    );
+    announcement = await api.getAnnouncementById(itemId);
   } catch {
     notFound();
   }
+
+  return (
+    <main className="container section">
+      <Link href="/" className="button button--secondary">
+        العودة للرئيسية
+      </Link>
+      <article className="list-card" style={{ marginTop: "24px" }}>
+        <span className="card__meta">{announcement.category} · {announcement.date}</span>
+        <h1 style={{ margin: "12px 0" }}>{announcement.title}</h1>
+        <p>{announcement.excerpt}</p>
+      </article>
+    </main>
+  );
 }

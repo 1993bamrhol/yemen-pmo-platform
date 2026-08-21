@@ -1,7 +1,8 @@
 package ye.gov.pmo.bootstrap.controller;
 
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import ye.gov.pmo.bootstrap.entity.SupportRequest;
 import ye.gov.pmo.bootstrap.repository.SupportRequestRepository;
 
@@ -27,7 +33,7 @@ public class SupportRequestController {
 
     @PostMapping("/requests")
     @ResponseStatus(HttpStatus.CREATED)
-    public SupportRequestResponse create(@RequestBody SupportRequestRequest request) {
+    public SupportRequestResponse create(@Valid @RequestBody SupportRequestRequest request) {
         SupportRequest entity = new SupportRequest(
                 request.fullName(),
                 request.email(),
@@ -39,7 +45,7 @@ public class SupportRequestController {
     }
 
     @GetMapping("/requests")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('content.manage')")
     public List<SupportRequestResponse> list() {
         return supportRequestRepository.findAllByOrderByCreatedAtDesc().stream()
                 .map(this::toResponse)
@@ -47,10 +53,11 @@ public class SupportRequestController {
     }
 
     @PatchMapping("/requests/{id}/status")
-    @PreAuthorize("hasRole('ADMIN')")
-    public SupportRequestResponse updateStatus(@PathVariable Long id, @RequestBody StatusUpdateRequest request) {
+    @PreAuthorize("hasAuthority('content.manage')")
+    public SupportRequestResponse updateStatus(@PathVariable Long id, @Valid @RequestBody StatusUpdateRequest request) {
         SupportRequest entity = supportRequestRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Support request not found: " + id));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Support request not found: " + id));
 
         entity.setStatus(normalizeStatus(request.status()));
         return toResponse(supportRequestRepository.save(entity));
@@ -66,17 +73,19 @@ public class SupportRequestController {
                 entity.getSubject(),
                 entity.getMessage(),
                 entity.getStatus(),
-                entity.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                entity.getCreatedAt());
     }
 
     private String normalizeCategory(String category) {
         if (category == null || category.isBlank()) {
             return "استفسار";
         }
-        return switch (category.trim()) {
-            case "استفسار", "اقتراح", "شكوى", "طلب وثيقة", "خدمة" -> category.trim();
-            default -> category.trim();
-        };
+        String normalized = category.trim();
+        Set<String> allowedCategories = Set.of("استفسار", "اقتراح", "شكوى", "طلب وثيقة", "خدمة");
+        if (!allowedCategories.contains(normalized)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported support request category");
+        }
+        return normalized;
     }
 
     private String normalizeStatus(String status) {
@@ -88,20 +97,20 @@ public class SupportRequestController {
             case "in_review", "review", "قيد_المراجعة", "قيد المراجعة" -> "in_review";
             case "replied", "answered", "تم_الرد", "تم الرد" -> "replied";
             case "resolved", "closed", "مغلقة", "مقفل" -> "resolved";
-            default -> "new";
+            default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported support request status");
         };
     }
 
     public record SupportRequestRequest(
-            String fullName,
-            String email,
-            String phone,
-            String category,
-            String subject,
-            String message) {
+            @NotBlank @Size(max = 120) String fullName,
+            @NotBlank @Email @Size(max = 120) String email,
+            @Size(max = 30) String phone,
+            @NotBlank @Size(max = 60) String category,
+            @NotBlank @Size(max = 180) String subject,
+            @NotBlank @Size(max = 5000) String message) {
     }
 
-    public record StatusUpdateRequest(String status) {
+    public record StatusUpdateRequest(@NotBlank @Size(max = 30) String status) {
     }
 
     public record SupportRequestResponse(
@@ -113,6 +122,6 @@ public class SupportRequestController {
             String subject,
             String message,
             String status,
-            String createdAt) {
+            LocalDateTime createdAt) {
     }
 }

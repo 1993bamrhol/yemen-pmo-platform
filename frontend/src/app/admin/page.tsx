@@ -4,17 +4,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { api, type AdminContentInput, type AdminContentItem, type AdminContentSummary, type SupportInboxItem } from "@/lib/api";
+import { api, ApiError, type AdminContentInput, type AdminContentItem, type AdminContentSummary, type SupportInboxItem } from "@/lib/api";
 import { clearStoredAuthToken, getStoredAuthToken } from "@/lib/auth";
 
-const fallbackContent: AdminContentItem[] = [
-  { id: 1, type: "news", title: "اجتماع لمناقشة أولويات الخدمات الحكومية الرقمية", status: "منشور", author: "أحمد علي", category: "الأخبار", updatedAt: "2026-08-16" },
-  { id: 2, type: "announcement", title: "إعلان رسمي عن إطلاق المرحلة الأولى من البوابة الحكومية", status: "مسودة", author: "سارة محمد", category: "الإعلانات", updatedAt: "2026-08-15" },
-  { id: 3, type: "decision", title: "قرار اعتماد الهوية البصرية الرسمية", status: "منشور", author: "خالد اليماني", category: "القرارات", updatedAt: "2026-08-12" },
-  { id: 4, type: "document", title: "خطة النشر لمرحلة MVP", status: "مؤرشف", author: "منى المعلمي", category: "الوثائق", updatedAt: "2026-08-10" }
-];
-
-const fallbackSummary: AdminContentSummary = { total: 4, published: 2, draft: 1, archived: 1 };
+const emptySummary: AdminContentSummary = { total: 0, published: 0, draft: 0, archived: 0 };
 
 const supportStatusLabels: Record<string, string> = {
   new: "جديدة",
@@ -33,9 +26,9 @@ const emptyForm: AdminContentInput = {
 
 export default function AdminPage() {
   const [token, setToken] = useState<string | null>(null);
-  const [content, setContent] = useState<AdminContentItem[]>(fallbackContent);
+  const [content, setContent] = useState<AdminContentItem[]>([]);
   const [supportRequests, setSupportRequests] = useState<SupportInboxItem[]>([]);
-  const [summary, setSummary] = useState<AdminContentSummary>(fallbackSummary);
+  const [summary, setSummary] = useState<AdminContentSummary>(emptySummary);
   const [isLoading, setIsLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState("all");
   const [error, setError] = useState("");
@@ -44,30 +37,30 @@ export default function AdminPage() {
   const [formValue, setFormValue] = useState<AdminContentInput>(emptyForm);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const refreshData = async (savedToken: string) => {
-    const [nextContent, nextSummary, nextRequests] = await Promise.all([
-      api.getAdminContent(savedToken),
-      api.getAdminSummary(savedToken),
-      api.getSupportRequests(savedToken)
-    ]);
-    setContent(nextContent);
-    setSummary(nextSummary);
-    setSupportRequests(nextRequests);
-    setError("");
-  };
-
   useEffect(() => {
     const savedToken = getStoredAuthToken();
     if (!savedToken) {
-      setToken(null);
-      setIsLoading(false);
+      queueMicrotask(() => setIsLoading(false));
       return;
     }
 
-    setToken(savedToken);
-
-    refreshData(savedToken)
-      .catch(() => {
+    Promise.all([
+      api.getAdminContent(savedToken),
+      api.getAdminSummary(savedToken),
+      api.getSupportRequests(savedToken)
+    ])
+      .then(([nextContent, nextSummary, nextRequests]) => {
+        setToken(savedToken);
+        setContent(nextContent);
+        setSummary(nextSummary);
+        setSupportRequests(nextRequests);
+        setError("");
+      })
+      .catch((refreshError: unknown) => {
+        if (refreshError instanceof ApiError && [401, 403].includes(refreshError.status)) {
+          clearStoredAuthToken();
+          setToken(null);
+        }
         setError("جلسة الإدارة منتهية أو غير صالحة. يُرجى تسجيل الدخول مجددًا.");
       })
       .finally(() => setIsLoading(false));
