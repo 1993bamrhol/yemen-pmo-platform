@@ -1,6 +1,7 @@
 services:
   - type: web
     name: yemen-pmo-api
+    repo: https://github.com/1993bamrhol/yemen-pmo-platform
     runtime: docker
     plan: free
     region: frankfurt
