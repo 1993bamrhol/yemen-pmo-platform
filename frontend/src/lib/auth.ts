@@ -5,7 +5,7 @@ export function getStoredAuthToken(): string | null {
     return null;
   }
 
-  return localStorage.getItem(AUTH_STORAGE_KEY);
+  return sessionStorage.getItem(AUTH_STORAGE_KEY);
 }
 
 export function setStoredAuthToken(token: string): void {
@@ -13,7 +13,8 @@ export function setStoredAuthToken(token: string): void {
     return;
   }
 
-  localStorage.setItem(AUTH_STORAGE_KEY, token);
+  sessionStorage.setItem(AUTH_STORAGE_KEY, token);
+  localStorage.removeItem(AUTH_STORAGE_KEY);
 }
 
 export function clearStoredAuthToken(): void {
@@ -21,5 +22,6 @@ export function clearStoredAuthToken(): void {
     return;
   }
 
+  sessionStorage.removeItem(AUTH_STORAGE_KEY);
   localStorage.removeItem(AUTH_STORAGE_KEY);
 }

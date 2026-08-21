@@ -1,15 +1,28 @@
 import type { PortalHomeContent } from "@/lib/site-data";
 
-const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080";
+function getBaseUrl(): string {
+  if (typeof window === "undefined") {
+    return process.env.API_BASE_URL ?? process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080";
+  }
+
+  return process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080";
+}
+
+export class ApiError extends Error {
+  constructor(public readonly status: number) {
+    super(`Request failed: ${status}`);
+    this.name = "ApiError";
+  }
+}
 
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
-  const response = await fetch(`${baseUrl}${path}`, {
+  const response = await fetch(`${getBaseUrl()}${path}`, {
     cache: "no-store",
     ...init
   });
 
   if (!response.ok) {
-    throw new Error(`Request failed: ${response.status}`);
+    throw new ApiError(response.status);
   }
 
   const text = await response.text();

@@ -4,9 +4,9 @@ services:
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-yemen_pmo}
       POSTGRES_USER: ${POSTGRES_USER:-yemen_pmo}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -23,25 +23,31 @@ services:
     environment:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:-jdbc:postgresql://database:5432/yemen_pmo}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-yemen_pmo}
-      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-change_me}
-      SECURITY_JWT_SECRET: ${SECURITY_JWT_SECRET:-ZmFrZS1zZWNyZXQtZm9yLXllbWVuLXBtby1wbGF0Zm9ybS0xMjM0NTY3ODkw}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:?Set SPRING_DATASOURCE_PASSWORD in .env}
+      SECURITY_JWT_SECRET: ${SECURITY_JWT_SECRET:?Set SECURITY_JWT_SECRET in .env}
       SECURITY_JWT_EXPIRATION_MS: ${SECURITY_JWT_EXPIRATION_MS:-86400000}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@pmo.gov.ye}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Set ADMIN_PASSWORD in .env}
+      APP_CORS_ALLOWED_ORIGINS: ${APP_CORS_ALLOWED_ORIGINS:-http://localhost:3000}
     depends_on:
       database:
         condition: service_healthy
     ports:
-      - "8080:8080"
+      - "${BACKEND_PORT:-8080}:8080"
     restart: unless-stopped
 
   frontend:
     build:
       context: ./frontend
+      args:
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8080}
     environment:
-      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8080}
+      API_BASE_URL: ${API_BASE_URL:-http://backend:8080}
     depends_on:
       - backend
     ports:
-      - "3000:3000"
+      - "${FRONTEND_PORT:-3000}:3000"
     restart: unless-stopped
 
 volumes:

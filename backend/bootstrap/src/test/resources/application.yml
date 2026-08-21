@@ -11,3 +11,15 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration
+
+security:
+  jwt:
+    secret: dGVzdC1vbmx5LWp3dC1rZXktZm9yLXllbWVuLXBtby1wbGF0Zm9ybS0yMDI2
+
+bootstrap:
+  admin:
+    password: TestOnlyAdminPassword!2026
+
+app:
+  cors:
+    allowed-origins: http://localhost:3000
