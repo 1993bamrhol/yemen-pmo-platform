@@ -16,9 +16,11 @@ export class ApiError extends Error {
 }
 
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+  const timeoutMs = typeof window === "undefined" ? 8_000 : 30_000;
   const response = await fetch(`${getBaseUrl()}${path}`, {
     cache: "no-store",
-    ...init
+    ...init,
+    signal: init.signal ?? AbortSignal.timeout(timeoutMs)
   });
 
   if (!response.ok) {
