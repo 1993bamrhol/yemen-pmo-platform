@@ -38,3 +38,14 @@ bootstrap:
 app:
   cors:
     allowed-origins: ${APP_CORS_ALLOWED_ORIGINS:http://localhost:3000}
+
+features:
+  unified-content-read:
+    enabled: ${FEATURE_UNIFIED_CONTENT_READ_ENABLED:false}
+  unified-content-backfill-apply:
+    enabled: ${FEATURES_UNIFIED_CONTENT_BACKFILL_APPLY_ENABLED:false}
+  unified-content-compatibility:
+    news-enabled: ${FEATURES_UNIFIED_CONTENT_COMPATIBILITY_NEWS_ENABLED:false}
+    announcements-enabled: ${FEATURES_UNIFIED_CONTENT_COMPATIBILITY_ANNOUNCEMENTS_ENABLED:false}
+    decisions-enabled: ${FEATURES_UNIFIED_CONTENT_COMPATIBILITY_DECISIONS_ENABLED:false}
+    documents-enabled: ${FEATURES_UNIFIED_CONTENT_COMPATIBILITY_DOCUMENTS_ENABLED:false}

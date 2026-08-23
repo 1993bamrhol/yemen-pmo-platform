@@ -7,7 +7,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ye.gov.pmo.documents.dto.DocumentResponse;
 
 @Service
-public class DocumentService {
+public class DocumentService implements DocumentQuery {
 
     private final List<DocumentResponse> documents = List.of(
             new DocumentResponse(
@@ -29,10 +29,12 @@ public class DocumentService {
                     "10 أغسطس 2026",
                     "إرشادات الألوان والخطوط والهوية الرقمية الرسمية."));
 
+    @Override
     public List<DocumentResponse> findAll() {
         return documents;
     }
 
+    @Override
     public DocumentResponse findById(Long id) {
         return documents.stream()
                 .filter(document -> document.id().equals(id))

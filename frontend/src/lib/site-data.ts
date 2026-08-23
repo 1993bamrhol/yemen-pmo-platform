@@ -12,9 +12,15 @@ export type HighlightCard = {
 };
 
 export type ListItem = {
+  id?: number;
   title: string;
   meta: string;
   description: string;
+};
+
+export type DocumentLink = {
+  id: number;
+  title: string;
 };
 
 export type HeroStory = {
@@ -50,7 +56,7 @@ export type PortalHomeContent = {
   decisions: ListItem[];
   serviceCards: ServiceCard[];
   services: string[];
-  documents: string[];
+  documents: Array<string | DocumentLink>;
   mediaItems: string[];
   governancePrinciples: string[];
 };
@@ -64,9 +70,7 @@ export const navItems: NavItem[] = [
   { label: "القرارات", href: "/#decisions" },
   { label: "الخدمات", href: "/services" },
   { label: "الاستفسارات", href: "/complaints" },
-  { label: "الوثائق", href: "/#documents" },
-  { label: "الإدارة", href: "/admin" },
-  { label: "تواصل معنا", href: "/contact" }
+  { label: "الوثائق", href: "/#documents" }
 ];
 
 export const heroStory: HeroStory = {
@@ -92,25 +96,28 @@ export const portalHighlights = [
 ];
 
 export const officialChannels: Channel[] = [
-  { label: "البريد الرسمي", value: "info@example.gov.ye" },
-  { label: "مركز الاتصال", value: "+967 1 000 000" },
+  { label: "المراسلات", value: "نموذج التواصل الإلكتروني" },
+  { label: "الاستفسارات", value: "بوابة الطلبات الرسمية" },
   { label: "ساعات الخدمة", value: "الأحد - الخميس" }
 ];
 
 export const latestNews: HighlightCard[] = [
   {
+    id: 1,
     title: "اجتماع لمناقشة أولويات الخدمات الحكومية الرقمية",
     date: "16 أغسطس 2026",
     category: "الأخبار",
     excerpt: "رئاسة الوزراء تتابع خطوات تنفيذ المنصة الرقمية الموحدة."
   },
   {
+    id: 2,
     title: "اعتماد الإطار المؤسسي للبوابة الرسمية",
     date: "15 أغسطس 2026",
     category: "البيانات",
     excerpt: "الوثيقة تحدد الأهداف والفئات المستهدفة والهيكل التنظيمي."
   },
   {
+    id: 3,
     title: "إطلاق المرحلة الأولى من المحتوى الرسمي",
     date: "14 أغسطس 2026",
     category: "القرارات",
@@ -120,18 +127,21 @@ export const latestNews: HighlightCard[] = [
 
 export const officialAnnouncements: HighlightCard[] = [
   {
+    id: 1,
     title: "إعلان رسمي عن إطلاق المرحلة الأولى من البوابة الحكومية",
     date: "18 أغسطس 2026",
     category: "إعلان رسمي",
     excerpt: "تبدأ الرئاسة في نشر البيانات الرسمية والخدمات الأساسية عبر البوابة الموحدة."
   },
   {
+    id: 2,
     title: "تحديث نظام الاستقبال الإلكتروني للملاحظات والاقتراحات",
     date: "17 أغسطس 2026",
     category: "خدمة عامة",
     excerpt: "يتم توحيد قنوات الاستقبال ومراجعة الطلبات بطريقة موحدة وشفافة."
   },
   {
+    id: 3,
     title: "إعلان حول آلية نشر البيانات والوثائق الرسمية",
     date: "16 أغسطس 2026",
     category: "إرشاد",
@@ -141,11 +151,13 @@ export const officialAnnouncements: HighlightCard[] = [
 
 export const officialStatements: ListItem[] = [
   {
+    id: 1,
     title: "بيان رسمي حول تقدم أعمال البوابة",
     meta: "بيان رسمي",
     description: "التأكيد على أن البوابة ستكون المصدر الرسمي للمعلومة الحكومية."
   },
   {
+    id: 2,
     title: "تحديثات تنظيمية على مسار النشر",
     meta: "أمانة عامة",
     description: "ضبط إجراءات النشر والمراجعة والصلاحيات التحريرية."
@@ -154,11 +166,13 @@ export const officialStatements: ListItem[] = [
 
 export const decisions: ListItem[] = [
   {
+    id: 1,
     title: "قرار اعتماد الهوية البصرية الرسمية",
     meta: "قرار",
     description: "اعتماد الألوان والخطوط والطابع الرسمي للبوابة."
   },
   {
+    id: 2,
     title: "تعميم تنظيم المحتوى الحكومي",
     meta: "تعميم",
     description: "تحديد أسلوب النشر والتصنيف والأرشفة."
@@ -172,11 +186,11 @@ export const services = [
   "الأسئلة الشائعة"
 ];
 
-export const documents = [
-  "وثيقة التحليل المؤسسي",
-  "خطة MVP",
-  "دليل الهوية البصرية",
-  "خارطة الموقع"
+export const documents: DocumentLink[] = [
+  { id: 1, title: "وثيقة التحليل المؤسسي" },
+  { id: 2, title: "خطة إطلاق البوابة" },
+  { id: 3, title: "دليل الهوية البصرية" },
+  { id: 4, title: "خارطة الموقع" }
 ];
 
 export const mediaItems = [

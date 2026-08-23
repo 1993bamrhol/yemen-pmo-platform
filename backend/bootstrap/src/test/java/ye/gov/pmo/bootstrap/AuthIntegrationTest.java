@@ -40,10 +40,7 @@ class AuthIntegrationTest {
 
     @Test
     void loginReturnsJwtAndProtectsEndpoints() throws Exception {
-        Permission permission = new Permission();
-        permission.setName("users.read");
-        permission.setDescription("Read users");
-        permission = permissionService.save(permission);
+        Permission permission = permissionService.findByName("users.read");
 
         Role role = new Role();
         role.setName("ADMIN");

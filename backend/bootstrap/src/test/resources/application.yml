@@ -23,3 +23,14 @@ bootstrap:
 app:
   cors:
     allowed-origins: http://localhost:3000
+
+features:
+  unified-content-read:
+    enabled: true
+  unified-content-backfill-apply:
+    enabled: true
+  unified-content-compatibility:
+    news-enabled: false
+    announcements-enabled: false
+    decisions-enabled: false
+    documents-enabled: false

@@ -51,7 +51,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/api/auth/**", "/api/portal/**", "/api/news/**", "/api/announcements/**", "/api/decisions/**", "/api/documents/**", "/actuator/health", "/health").permitAll()
+                        .requestMatchers("/", "/error", "/api/auth/**", "/api/portal/**", "/api/news/**", "/api/announcements/**", "/api/decisions/**", "/api/documents/**", "/api/v1/entities/**", "/api/v1/entity-types", "/api/v1/content", "/api/v1/content/**", "/actuator/health", "/health").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/support/requests").permitAll()
                         .requestMatchers("/api/admin/**").authenticated()
                         .anyRequest().authenticated())

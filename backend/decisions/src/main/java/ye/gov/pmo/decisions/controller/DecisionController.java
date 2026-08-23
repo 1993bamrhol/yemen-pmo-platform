@@ -6,15 +6,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ye.gov.pmo.decisions.dto.DecisionResponse;
-import ye.gov.pmo.decisions.service.DecisionService;
+import ye.gov.pmo.decisions.service.DecisionQuery;
 
 @RestController
 @RequestMapping("/api/decisions")
 public class DecisionController {
 
-    private final DecisionService decisionService;
+    private final DecisionQuery decisionService;
 
-    public DecisionController(DecisionService decisionService) {
+    public DecisionController(DecisionQuery decisionService) {
         this.decisionService = decisionService;
     }
 

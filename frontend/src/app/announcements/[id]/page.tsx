@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { api } from "@/lib/api";
+import { officialAnnouncements } from "@/lib/site-data";
 
 export default async function AnnouncementDetailPage({
   params
@@ -14,7 +15,8 @@ export default async function AnnouncementDetailPage({
   try {
     announcement = await api.getAnnouncementById(itemId);
   } catch {
-    notFound();
+    announcement = officialAnnouncements.find((item) => item.id === itemId);
+    if (!announcement) notFound();
   }
 
   return (

@@ -28,6 +28,8 @@
 
         <module>organization</module>
 
+        <module>content</module>
+
         <module>news</module>
 
         <module>meetings</module>

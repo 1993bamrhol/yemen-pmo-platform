@@ -16,7 +16,9 @@ export class ApiError extends Error {
 }
 
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
-  const timeoutMs = typeof window === "undefined" ? 8_000 : 30_000;
+  // Keep public pages responsive when the API is unavailable. The UI has
+  // vetted local fallback content, so a long blocking timeout adds no value.
+  const timeoutMs = typeof window === "undefined" ? 1_500 : 10_000;
   const response = await fetch(`${getBaseUrl()}${path}`, {
     cache: "no-store",
     ...init,

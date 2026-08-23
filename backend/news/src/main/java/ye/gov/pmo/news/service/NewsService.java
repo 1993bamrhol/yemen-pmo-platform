@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
-public class NewsService {
+public class NewsService implements NewsQuery {
 
     private final List<NewsArticleResponse> articles = List.of(
             new NewsArticleResponse(
@@ -29,10 +29,12 @@ public class NewsService {
                     "14 أغسطس 2026",
                     "بدء نشر الأخبار والقرارات والتعاميم عبر البوابة الجديدة."));
 
+    @Override
     public List<NewsArticleResponse> findAll() {
         return articles;
     }
 
+    @Override
     public NewsArticleResponse findById(Long id) {
         return articles.stream()
                 .filter(article -> article.id().equals(id))

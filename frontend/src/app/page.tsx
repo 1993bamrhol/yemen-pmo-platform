@@ -17,7 +17,20 @@ import {
   services
 } from "@/lib/site-data";
 
-export default async function HomePage() {
+type SearchResult = {
+  title: string;
+  description: string;
+  href: string;
+  category: string;
+};
+
+export default async function HomePage({
+  searchParams
+}: {
+  searchParams: Promise<{ q?: string | string[] }>;
+}) {
+  const resolvedSearchParams = await searchParams;
+  const query = (Array.isArray(resolvedSearchParams.q) ? resolvedSearchParams.q[0] : resolvedSearchParams.q)?.trim() ?? "";
   const [portalHomeResult, newsResult, announcementsResult, decisionsResult, documentsResult] = await Promise.all([
     api.getPortalHome().then(
       (data) => ({ ok: true as const, data }),
@@ -61,6 +74,31 @@ export default async function HomePage() {
     description: string;
   }>;
   const documentItems = documentsResult.ok ? documentsResult.data : home.documents ?? documents;
+  const normalizedQuery = query.toLocaleLowerCase("ar");
+  const searchResults: SearchResult[] = normalizedQuery
+    ? [
+        ...announcementItems.flatMap((item) =>
+          item.id
+            ? [{ title: item.title, description: item.excerpt, href: `/announcements/${item.id}`, category: item.category ?? "إعلان" }]
+            : []
+        ),
+        ...newsItems.flatMap((item) =>
+          item.id
+            ? [{ title: item.title, description: item.excerpt, href: `/news/${item.id}`, category: item.category ?? "خبر" }]
+            : []
+        ),
+        ...decisionItems.flatMap((item) =>
+          item.id
+            ? [{ title: item.title, description: item.description, href: `/decisions/${item.id}`, category: item.category ?? item.meta ?? "قرار" }]
+            : []
+        ),
+        ...documentItems.flatMap((document) =>
+          typeof document === "string" || !document.id
+            ? []
+            : [{ title: document.title, description: "وثيقة منشورة في مكتبة البوابة", href: `/documents/${document.id}`, category: "وثيقة" }]
+        )
+      ].filter((item) => `${item.title} ${item.description} ${item.category}`.toLocaleLowerCase("ar").includes(normalizedQuery))
+    : [];
 
   return (
     <>
@@ -69,8 +107,29 @@ export default async function HomePage() {
         {!portalHomeResult.ok ? (
           <section className="container section">
             <div className="notice notice--warning" role="status">
-              تعذر الاتصال بالخادم المؤسسي: {portalHomeResult.error}. وتعرض الصفحة البيانات الاحتياطية المحلية.
+              نعرض نسخة محفوظة مؤقتًا من محتوى البوابة حتى استعادة الاتصال بالخدمة.
             </div>
+          </section>
+        ) : null}
+
+        {query ? (
+          <section className="container section search-results" id="search-results" aria-labelledby="search-results-title">
+            <div className="section-heading">
+              <span className="eyebrow">نتائج البحث</span>
+              <h2 id="search-results-title">نتائج البحث عن «{query}»</h2>
+              <p>{searchResults.length ? `تم العثور على ${searchResults.length} نتيجة.` : "لم نعثر على نتائج مطابقة. جرّب كلمات أقصر أو أكثر عمومية."}</p>
+            </div>
+            {searchResults.length ? (
+              <div className="list-grid">
+                {searchResults.map((item) => (
+                  <article key={`${item.href}-${item.title}`} className="list-card">
+                    <span className="card__meta">{item.category}</span>
+                    <h3><Link href={item.href}>{item.title}</Link></h3>
+                    <p>{item.description}</p>
+                  </article>
+                ))}
+              </div>
+            ) : null}
           </section>
         ) : null}
 
@@ -93,7 +152,7 @@ export default async function HomePage() {
                   {item.category} · {item.date}
                 </span>
                 <h4>
-                  <Link href={`/announcements/${item.id ?? 1}`}>{item.title}</Link>
+                  {item.id ? <Link href={`/announcements/${item.id}`}>{item.title}</Link> : item.title}
                 </h4>
                 <p>{item.excerpt}</p>
               </article>
@@ -113,7 +172,7 @@ export default async function HomePage() {
                   {item.category} · {item.date}
                 </span>
                 <h4>
-                  <Link href={`/news/${item.id ?? 1}`}>{item.title}</Link>
+                  {item.id ? <Link href={`/news/${item.id}`}>{item.title}</Link> : item.title}
                 </h4>
                 <p>{item.excerpt}</p>
               </article>
@@ -128,7 +187,7 @@ export default async function HomePage() {
           />
           <div className="pill-grid">
             {(home.governancePrinciples ?? governancePrinciples).map((item) => (
-              <span key={item} className="pill pill--muted">
+              <span key={item} className="pill pill--static">
                 {item}
               </span>
             ))}
@@ -161,7 +220,7 @@ export default async function HomePage() {
               <article key={item.id ?? item.title} className="list-card">
                 <span className="card__meta">{item.category ?? item.meta ?? "قرار"}</span>
                 <h4>
-                  <Link href={`/decisions/${item.id ?? 1}`}>{item.title}</Link>
+                  {item.id ? <Link href={`/decisions/${item.id}`}>{item.title}</Link> : item.title}
                 </h4>
                 <p>{item.description}</p>
               </article>
@@ -176,18 +235,18 @@ export default async function HomePage() {
           />
           <div className="info-grid">
             {(home.serviceCards ?? serviceCards).map((item) => (
-              <article key={item.title} className="info-card">
+              <Link key={item.title} className="info-card info-card--link" href="/services">
                 <span className="card__meta">خدمة رقمية</span>
                 <h4>{item.title}</h4>
                 <p>{item.description}</p>
-              </article>
+              </Link>
             ))}
           </div>
           <div className="pill-grid">
             {(home.services ?? services).map((service) => (
-              <span key={service} className="pill">
+              <Link key={service} className="pill" href="/services">
                 {service}
-              </span>
+              </Link>
             ))}
           </div>
         </section>
@@ -201,7 +260,7 @@ export default async function HomePage() {
             {documentItems.map((document) => (
               <Link
                 key={typeof document === "string" ? document : document.title}
-                href={typeof document === "string" ? "/documents/1" : `/documents/${document.id ?? 1}`}
+                href={typeof document === "string" ? "/#documents" : `/documents/${document.id}`}
                 className="pill"
               >
                 {typeof document === "string" ? document : document.title}
@@ -217,7 +276,7 @@ export default async function HomePage() {
           />
           <div className="pill-grid">
             {(home.mediaItems ?? mediaItems).map((item) => (
-              <span key={item} className="pill">
+              <span key={item} className="pill pill--static">
                 {item}
               </span>
             ))}

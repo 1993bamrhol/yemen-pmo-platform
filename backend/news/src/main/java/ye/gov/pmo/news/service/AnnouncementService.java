@@ -7,7 +7,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ye.gov.pmo.news.dto.AnnouncementResponse;
 
 @Service
-public class AnnouncementService {
+public class AnnouncementService implements AnnouncementQuery {
 
     private final List<AnnouncementResponse> announcements = List.of(
             new AnnouncementResponse(
@@ -29,10 +29,12 @@ public class AnnouncementService {
                     "16 أغسطس 2026",
                     "يحدد الإعلان أوقات النشر ومراجعة المحتوى وتحديث الوثائق الرسمية."));
 
+    @Override
     public List<AnnouncementResponse> findAll() {
         return announcements;
     }
 
+    @Override
     public AnnouncementResponse findById(Long id) {
         return announcements.stream()
                 .filter(item -> item.id().equals(id))

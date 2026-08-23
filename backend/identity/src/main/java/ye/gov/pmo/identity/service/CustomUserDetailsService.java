@@ -9,6 +9,7 @@ import ye.gov.pmo.identity.entity.Permission;
 import ye.gov.pmo.identity.entity.Role;
 import ye.gov.pmo.identity.entity.User;
 import ye.gov.pmo.identity.repository.UserRepository;
+import ye.gov.pmo.identity.repository.RoleAssignmentRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,9 +20,11 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final RoleAssignmentRepository roleAssignmentRepository;
 
-    public CustomUserDetailsService(UserRepository userRepository) {
+    public CustomUserDetailsService(UserRepository userRepository, RoleAssignmentRepository roleAssignmentRepository) {
         this.userRepository = userRepository;
+        this.roleAssignmentRepository = roleAssignmentRepository;
     }
 
     @Override
@@ -49,6 +52,14 @@ public class CustomUserDetailsService implements UserDetailsService {
                 authorities.add(permission.getName());
             }
         }
+
+        roleAssignmentRepository.findAllByUserIdAndEnabledTrue(user.getId()).stream()
+                .filter(assignment -> assignment.isActiveAt(java.time.OffsetDateTime.now()))
+                .forEach(assignment -> {
+                    authorities.add("ROLE_" + assignment.getRole().getName());
+                    assignment.getRole().getPermissions()
+                            .forEach(permission -> authorities.add(permission.getName()));
+                });
 
         return authorities.stream()
                 .map(SimpleGrantedAuthority::new)

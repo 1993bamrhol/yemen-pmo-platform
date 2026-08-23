@@ -6,15 +6,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ye.gov.pmo.news.dto.AnnouncementResponse;
-import ye.gov.pmo.news.service.AnnouncementService;
+import ye.gov.pmo.news.service.AnnouncementQuery;
 
 @RestController
 @RequestMapping("/api/announcements")
 public class AnnouncementController {
 
-    private final AnnouncementService announcementService;
+    private final AnnouncementQuery announcementService;
 
-    public AnnouncementController(AnnouncementService announcementService) {
+    public AnnouncementController(AnnouncementQuery announcementService) {
         this.announcementService = announcementService;
     }
 

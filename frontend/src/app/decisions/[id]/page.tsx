@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { api } from "@/lib/api";
+import { decisions } from "@/lib/site-data";
 
 export default async function DecisionDetailPage({
   params
@@ -14,7 +15,11 @@ export default async function DecisionDetailPage({
   try {
     decision = await api.getDecisionById(decisionId);
   } catch {
-    notFound();
+    const fallback = decisions.find((item) => item.id === decisionId);
+    decision = fallback
+      ? { ...fallback, category: fallback.meta, date: "نسخة محفوظة" }
+      : undefined;
+    if (!decision) notFound();
   }
 
   return (

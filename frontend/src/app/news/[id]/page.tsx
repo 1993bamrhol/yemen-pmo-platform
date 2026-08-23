@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { api } from "@/lib/api";
+import { latestNews } from "@/lib/site-data";
 
 export default async function NewsDetailPage({
   params
@@ -14,7 +15,8 @@ export default async function NewsDetailPage({
   try {
     article = await api.getNewsById(articleId);
   } catch {
-    notFound();
+    article = latestNews.find((item) => item.id === articleId);
+    if (!article) notFound();
   }
 
   return (

@@ -8,6 +8,7 @@ import ye.gov.pmo.identity.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,14 +37,20 @@ public class AuthController {
 
     @PostMapping("/login")
     public AuthResponse login(@Valid @RequestBody AuthRequest request) {
-        authenticationManager.authenticate(
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
         User user = userService.findByUsername(request.getUsername());
-        String token = jwtService.generateToken(user);
-        Set<String> roles = user.getRoles().stream()
-                .map(role -> role.getName())
+        Set<String> roles = authentication.getAuthorities().stream()
+                .map(authority -> authority.getAuthority())
+                .filter(authority -> authority.startsWith("ROLE_"))
+                .map(authority -> authority.substring("ROLE_".length()))
                 .collect(Collectors.toSet());
+        Set<String> permissions = authentication.getAuthorities().stream()
+                .map(authority -> authority.getAuthority())
+                .filter(authority -> !authority.startsWith("ROLE_"))
+                .collect(Collectors.toSet());
+        String token = jwtService.generateToken(user, roles, permissions);
 
         return new AuthResponse(token, "Bearer", user.getUsername(), roles);
     }

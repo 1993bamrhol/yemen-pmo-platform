@@ -19,8 +19,8 @@ export function Footer() {
         <div id="contact">
           <h4>تواصل معنا</h4>
           <p>الإدارة العامة للبوابة الرقمية</p>
-          <p>البريد: info@example.gov.ye</p>
-          <p>الهاتف: +967 1 000 000</p>
+          <p><Link href="/contact">نموذج التواصل الإلكتروني</Link></p>
+          <p><Link href="/complaints">الاستفسارات والملاحظات</Link></p>
         </div>
       </div>
     </footer>

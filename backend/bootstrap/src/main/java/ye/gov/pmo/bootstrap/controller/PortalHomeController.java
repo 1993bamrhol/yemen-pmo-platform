@@ -2,11 +2,11 @@ package ye.gov.pmo.bootstrap.controller;
 
 import java.util.List;
 import ye.gov.pmo.decisions.dto.DecisionResponse;
-import ye.gov.pmo.decisions.service.DecisionService;
+import ye.gov.pmo.decisions.service.DecisionQuery;
 import ye.gov.pmo.documents.dto.DocumentResponse;
-import ye.gov.pmo.documents.service.DocumentService;
+import ye.gov.pmo.documents.service.DocumentQuery;
 import ye.gov.pmo.news.dto.NewsArticleResponse;
-import ye.gov.pmo.news.service.NewsService;
+import ye.gov.pmo.news.service.NewsQuery;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/portal")
 public class PortalHomeController {
 
-    private final NewsService newsService;
-    private final DecisionService decisionService;
-    private final DocumentService documentService;
+    private final NewsQuery newsService;
+    private final DecisionQuery decisionService;
+    private final DocumentQuery documentService;
 
-    public PortalHomeController(NewsService newsService, DecisionService decisionService, DocumentService documentService) {
+    public PortalHomeController(NewsQuery newsService, DecisionQuery decisionService, DocumentQuery documentService) {
         this.newsService = newsService;
         this.decisionService = decisionService;
         this.documentService = documentService;

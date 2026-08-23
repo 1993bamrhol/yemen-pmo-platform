@@ -3,6 +3,7 @@ package ye.gov.pmo.identity.security;
 import java.time.Instant;
 import java.util.Date;
 import java.util.stream.Collectors;
+import java.util.Set;
 
 import javax.crypto.SecretKey;
 
@@ -58,19 +59,24 @@ public class JwtService {
     }
 
     public String generateToken(User user) {
+        return generateToken(
+                user,
+                user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()),
+                user.getRoles().stream()
+                        .flatMap(role -> role.getPermissions().stream())
+                        .map(Permission::getName)
+                        .collect(Collectors.toSet()));
+    }
+
+    public String generateToken(User user, Set<String> roles, Set<String> permissions) {
         Instant now = Instant.now();
 
         return Jwts.builder()
                 .subject(user.getUsername())
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plusMillis(expirationMs)))
-                .claim("roles", user.getRoles().stream()
-                        .map(Role::getName)
-                        .collect(Collectors.toSet()))
-                .claim("permissions", user.getRoles().stream()
-                        .flatMap(role -> role.getPermissions().stream())
-                        .map(Permission::getName)
-                        .collect(Collectors.toSet()))
+                .claim("roles", roles)
+                .claim("permissions", permissions)
                 .signWith(signingKey)
                 .compact();
     }

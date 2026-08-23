@@ -6,15 +6,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ye.gov.pmo.documents.dto.DocumentResponse;
-import ye.gov.pmo.documents.service.DocumentService;
+import ye.gov.pmo.documents.service.DocumentQuery;
 
 @RestController
 @RequestMapping("/api/documents")
 public class DocumentController {
 
-    private final DocumentService documentService;
+    private final DocumentQuery documentService;
 
-    public DocumentController(DocumentService documentService) {
+    public DocumentController(DocumentQuery documentService) {
         this.documentService = documentService;
     }
 

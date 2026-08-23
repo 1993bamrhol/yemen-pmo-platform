@@ -7,7 +7,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ye.gov.pmo.decisions.dto.DecisionResponse;
 
 @Service
-public class DecisionService {
+public class DecisionService implements DecisionQuery {
 
     private final List<DecisionResponse> decisions = List.of(
             new DecisionResponse(
@@ -29,10 +29,12 @@ public class DecisionService {
                     "05 أغسطس 2026",
                     "ضبط آلية الاستفسارات والملاحظات عبر القنوات الرسمية."));
 
+    @Override
     public List<DecisionResponse> findAll() {
         return decisions;
     }
 
+    @Override
     public DecisionResponse findById(Long id) {
         return decisions.stream()
                 .filter(decision -> decision.id().equals(id))

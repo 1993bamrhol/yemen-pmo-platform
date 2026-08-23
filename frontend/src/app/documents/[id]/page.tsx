@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { api } from "@/lib/api";
+import { documents } from "@/lib/site-data";
 
 export default async function DocumentDetailPage({
   params
@@ -14,7 +15,16 @@ export default async function DocumentDetailPage({
   try {
     document = await api.getDocumentById(documentId);
   } catch {
-    notFound();
+    const fallback = documents.find((item) => item.id === documentId);
+    document = fallback
+      ? {
+          ...fallback,
+          category: "وثيقة رسمية",
+          updatedAt: "نسخة محفوظة",
+          description: "هذه الوثيقة متاحة ضمن النسخة المحفوظة من مكتبة البوابة."
+        }
+      : undefined;
+    if (!document) notFound();
   }
 
   return (

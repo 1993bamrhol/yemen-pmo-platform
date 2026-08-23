@@ -61,6 +61,24 @@
 
         <dependency>
             <groupId>ye.gov.pmo</groupId>
+            <artifactId>organization</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ye.gov.pmo</groupId>
+            <artifactId>content</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ye.gov.pmo</groupId>
+            <artifactId>shared</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ye.gov.pmo</groupId>
             <artifactId>news</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -80,6 +98,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
 
