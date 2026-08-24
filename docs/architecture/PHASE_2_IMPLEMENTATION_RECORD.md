@@ -1,6 +1,6 @@
 # Phase 2 Implementation Record — Unified Government Content
 
-> **الحالة:** In progress — Slices 1–4, 5A, 5B, and 5C-A complete; compatibility flags remain legacy
+> **الحالة:** In progress — Slices 1–4, 5A, 5B, and 5C-A complete; Slice 5C-B NEWS canary active in local Docker
 > **التاريخ:** 2026-08-24  
 > **المرجع:** `PHASE_2_UNIFIED_CONTENT_PLAN.md`
 
@@ -145,9 +145,9 @@
 
 راجع `PHASE_2_SHADOW_COMPARISON_RECORD.md` للتقرير الكامل.
 
-## الخطوة التالية
+## الحالة التشغيلية الحالية
 
-Slice 5C-B: تفعيل NEWS canary تشغيليًا بعد اعتماد مستقل؛ لم يبدأ بعد.
+Slice 5C-B: فُعّل NEWS canary فقط في Docker المحلي عند `2026-08-24T14:02:24Z` بعد اعتماد صريح؛ الأنواع الثلاثة الأخرى ما زالت على legacy.
 
 ## Slice 5B — Compatibility facades without cutover
 
@@ -175,3 +175,13 @@ Slice 5C-B: تفعيل NEWS canary تشغيليًا بعد اعتماد مستق
 - لم يُفعّل أي canary، وبقيت كل flags مغلقة.
 - الاختبار الكامل: 55 bootstrap و6 content و14 identity؛ 75 اختبارًا ناجحًا دون failures أو errors.
 - تحقق Docker/PostgreSQL: كل الأنواع `shadowReady=true` و`effectiveSource=LEGACY`، وظهرت طلبات smoke في legacy counters مع صفر automatic fallbacks.
+
+## Slice 5C-B — NEWS canary activation
+
+- تفعيل `FEATURES_UNIFIED_CONTENT_COMPATIBILITY_NEWS_ENABLED=true` في حاوية backend المحلية فقط.
+- تثبيت أعلام ANNOUNCEMENT وDECISION وDOCUMENT على `false` صراحةً؛ بقي مصدرها الفعلي `LEGACY`.
+- أصبحت NEWS `configuredForUnified=true` و`shadowReady=true` و`effectiveSource=UNIFIED`.
+- تطابقت list وdetail و`portalHome.latestNews` مع baseline قبل التفعيل، وأعيدت 404 للمعرّف المفقود كما قبل التحويل.
+- بعد smoke الأولي: 3 unified requests، صفر automatic fallbacks، و12/12 mapping مع صفر فروقات.
+- بدأت نافذة المراقبة في `2026-08-24T14:02:24Z`. لا يُفعّل نوع آخر قبل مرور 24 ساعة، وصول NEWS إلى 100 طلب على الأقل، واجتياز exit gates.
+- التفعيل محلي وليس نشرًا على production، ولا يغيّر default flags أو قاعدة البيانات أو مسار الكتابة.

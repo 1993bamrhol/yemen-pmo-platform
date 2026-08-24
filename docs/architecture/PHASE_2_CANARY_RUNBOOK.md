@@ -1,6 +1,6 @@
 # Phase 2 Slice 5C — Content Canary Runbook
 
-> **Status:** Canary instrumentation ready; activation not started
+> **Status:** NEWS canary active in local Docker; observation window in progress
 > **Date:** 2026-08-24
 > **Scope:** Existing read compatibility only. No write cutover, migration, deletion, or frontend redesign.
 
@@ -102,9 +102,11 @@ Rollback affects reads only. Legacy administration remains the writer throughout
 
 ## 8. Current decision
 
-Instrumentation, safety routing, tests, and this runbook are ready. Every production/default flag remains false. Enabling NEWS is a separate operational action and is not authorized by completion of this document.
+Explicit operational approval for NEWS only was granted on 2026-08-24. The local Docker backend has run with NEWS unified compatibility enabled since `2026-08-24T14:02:24Z`. Announcement, decision, and document compatibility remain disabled and effective on legacy reads.
 
-## 9. Verification record
+This is a local operational canary, not evidence of a production deployment. The default configuration remains false, the database and write path are unchanged, and no later content type is authorized until NEWS completes the exit gates.
+
+## 9. Pre-activation verification record
 
 - Full backend suite: 55 bootstrap, 6 content, and 14 identity tests; 75 passed with zero failures or errors.
 - Docker/PostgreSQL: Flyway remained at V6 and all four content types reported `shadowReady=true`.
@@ -112,3 +114,15 @@ Instrumentation, safety routing, tests, and this runbook are ready. Every produc
 - Generated smoke traffic appeared in the per-type legacy counters with zero unified requests and zero automatic fallbacks.
 - Health, legacy list/detail endpoints, and portal home returned 200; unified public read remained closed with 404.
 - `/actuator/metrics` was not anonymously accessible.
+
+## 10. NEWS activation record
+
+- Target: local Docker backend only.
+- Start: `2026-08-24T14:02:24Z` (`2026-08-24 17:02:24` Asia/Riyadh).
+- Active flags: NEWS `true`; ANNOUNCEMENT, DECISION, and DOCUMENT `false`.
+- Effective sources after activation: NEWS `UNIFIED`; all other types `LEGACY`.
+- Initial traffic: 3 unified NEWS compatibility requests, zero automatic fallbacks, and no fallback reasons.
+- Contract smoke: news list and representative detail returned 200; missing id returned 404; list, detail, and portal-home news payloads matched their pre-activation SHA-256 baselines exactly.
+- Shadow state: 12/12 mapped, zero differences; NEWS count, order, and fields matched; portal-home content projection remained ready.
+- Security boundary: direct unified public read remained closed with 404 and anonymous actuator metrics remained protected with 401.
+- Earliest exit review: after `2026-08-25T14:02:24Z`, provided at least 100 NEWS compatibility requests and every exit gate are satisfied.
