@@ -12,34 +12,29 @@ import ye.gov.pmo.news.service.NewsService;
 public class NewsCompatibilityQuery implements NewsQuery {
     private final NewsService legacy;
     private final UnifiedLegacyProjectionService unified;
-    private final ContentCompatibilityRouter router;
+    private final ContentCompatibilityExecutor executor;
 
     public NewsCompatibilityQuery(NewsService legacy, UnifiedLegacyProjectionService unified,
-                                  ContentCompatibilityRouter router) {
+                                  ContentCompatibilityExecutor executor) {
         this.legacy = legacy;
         this.unified = unified;
-        this.router = router;
+        this.executor = executor;
     }
 
     @Override
     public List<NewsArticleResponse> findAll() {
-        if (!router.useUnified("NEWS")) return legacy.findAll();
-        try {
-            return unified.findAll("NEWS", "STATIC_NEWS").stream().map(item ->
-                    new NewsArticleResponse(item.id(), item.title(), item.category(), item.date(), item.summary())).toList();
-        } catch (RuntimeException exception) {
-            return legacy.findAll();
-        }
+        return executor.execute("NEWS", "list", legacy::findAll, () ->
+                unified.findAll("NEWS", "STATIC_NEWS").stream().map(item ->
+                        new NewsArticleResponse(item.id(), item.title(), item.category(), item.date(), item.summary()))
+                        .toList());
     }
 
     @Override
     public NewsArticleResponse findById(Long id) {
-        if (!router.useUnified("NEWS")) return legacy.findById(id);
-        try {
+        NewsArticleResponse legacyItem = legacy.findById(id);
+        return executor.execute("NEWS", "detail", () -> legacyItem, () -> {
             var item = unified.findById("NEWS", "STATIC_NEWS", id);
             return new NewsArticleResponse(item.id(), item.title(), item.category(), item.date(), item.summary());
-        } catch (RuntimeException exception) {
-            return legacy.findById(id);
-        }
+        });
     }
 }

@@ -370,6 +370,7 @@ POST /api/v1/admin/content/{contentId}/attachments
 - canary/config switch يسمح بالعودة للقراءة القديمة أثناء الاستقرار.
 - **Slice 5A مكتملة في 2026-08-24:** shadow comparison أعاد 12/12 وصفر فروقات على PostgreSQL؛ لم يُحوّل أي endpoint.
 - **Slice 5B مكتملة في 2026-08-24:** facades ومفاتيح مستقلة لكل نوع جاهزة، مع شرط shadow وfallback تلقائي؛ بقيت جميع المفاتيح مغلقة ولم يبدأ canary.
+- **Slice 5C-A مكتملة في 2026-08-24:** observability وعدادات fallback وreadiness cache وrunbook جاهزة؛ تفعيل NEWS في 5C-B ما زال يحتاج اعتمادًا تشغيليًا مستقلًا.
 
 ### Slice 6 — Stabilization
 

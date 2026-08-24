@@ -12,34 +12,29 @@ import ye.gov.pmo.decisions.service.DecisionService;
 public class DecisionCompatibilityQuery implements DecisionQuery {
     private final DecisionService legacy;
     private final UnifiedLegacyProjectionService unified;
-    private final ContentCompatibilityRouter router;
+    private final ContentCompatibilityExecutor executor;
 
     public DecisionCompatibilityQuery(DecisionService legacy, UnifiedLegacyProjectionService unified,
-                                      ContentCompatibilityRouter router) {
+                                      ContentCompatibilityExecutor executor) {
         this.legacy = legacy;
         this.unified = unified;
-        this.router = router;
+        this.executor = executor;
     }
 
     @Override
     public List<DecisionResponse> findAll() {
-        if (!router.useUnified("DECISION")) return legacy.findAll();
-        try {
-            return unified.findAll("DECISION", "STATIC_DECISIONS").stream().map(item ->
-                    new DecisionResponse(item.id(), item.title(), item.category(), item.date(), item.summary())).toList();
-        } catch (RuntimeException exception) {
-            return legacy.findAll();
-        }
+        return executor.execute("DECISION", "list", legacy::findAll, () ->
+                unified.findAll("DECISION", "STATIC_DECISIONS").stream().map(item ->
+                        new DecisionResponse(item.id(), item.title(), item.category(), item.date(), item.summary()))
+                        .toList());
     }
 
     @Override
     public DecisionResponse findById(Long id) {
-        if (!router.useUnified("DECISION")) return legacy.findById(id);
-        try {
+        DecisionResponse legacyItem = legacy.findById(id);
+        return executor.execute("DECISION", "detail", () -> legacyItem, () -> {
             var item = unified.findById("DECISION", "STATIC_DECISIONS", id);
             return new DecisionResponse(item.id(), item.title(), item.category(), item.date(), item.summary());
-        } catch (RuntimeException exception) {
-            return legacy.findById(id);
-        }
+        });
     }
 }

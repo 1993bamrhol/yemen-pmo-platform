@@ -56,6 +56,6 @@ It also reports a comparison error class when readiness cannot be calculated. Th
 
 ## Canary and rollback boundary
 
-Slice 5B does not authorize canary activation. A future approved Slice 5C should enable one content type at a time, starting with news, monitor error/fallback/parity metrics, and then proceed sequentially. Rollback is changing that type's flag to `false`; unified tables, mappings, and revisions remain intact.
+Slice 5B does not authorize canary activation. Slice 5C-A added instrumentation and the approved execution boundary in `PHASE_2_CANARY_RUNBOOK.md`; Slice 5C-B remains unstarted. It must enable one content type at a time, starting with news. Rollback is changing that type's flag to `false`; unified tables, mappings, and revisions remain intact.
 
 Legacy writes still target the legacy admin model. They must not be redirected until a separate single-writer plan prevents split-brain.

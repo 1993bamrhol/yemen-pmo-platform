@@ -12,34 +12,29 @@ import ye.gov.pmo.news.service.AnnouncementService;
 public class AnnouncementCompatibilityQuery implements AnnouncementQuery {
     private final AnnouncementService legacy;
     private final UnifiedLegacyProjectionService unified;
-    private final ContentCompatibilityRouter router;
+    private final ContentCompatibilityExecutor executor;
 
     public AnnouncementCompatibilityQuery(AnnouncementService legacy, UnifiedLegacyProjectionService unified,
-                                          ContentCompatibilityRouter router) {
+                                          ContentCompatibilityExecutor executor) {
         this.legacy = legacy;
         this.unified = unified;
-        this.router = router;
+        this.executor = executor;
     }
 
     @Override
     public List<AnnouncementResponse> findAll() {
-        if (!router.useUnified("ANNOUNCEMENT")) return legacy.findAll();
-        try {
-            return unified.findAll("ANNOUNCEMENT", "STATIC_ANNOUNCEMENTS").stream().map(item ->
-                    new AnnouncementResponse(item.id(), item.title(), item.category(), item.date(), item.summary())).toList();
-        } catch (RuntimeException exception) {
-            return legacy.findAll();
-        }
+        return executor.execute("ANNOUNCEMENT", "list", legacy::findAll, () ->
+                unified.findAll("ANNOUNCEMENT", "STATIC_ANNOUNCEMENTS").stream().map(item ->
+                        new AnnouncementResponse(item.id(), item.title(), item.category(), item.date(), item.summary()))
+                        .toList());
     }
 
     @Override
     public AnnouncementResponse findById(Long id) {
-        if (!router.useUnified("ANNOUNCEMENT")) return legacy.findById(id);
-        try {
+        AnnouncementResponse legacyItem = legacy.findById(id);
+        return executor.execute("ANNOUNCEMENT", "detail", () -> legacyItem, () -> {
             var item = unified.findById("ANNOUNCEMENT", "STATIC_ANNOUNCEMENTS", id);
             return new AnnouncementResponse(item.id(), item.title(), item.category(), item.date(), item.summary());
-        } catch (RuntimeException exception) {
-            return legacy.findById(id);
-        }
+        });
     }
 }

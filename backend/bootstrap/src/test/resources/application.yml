@@ -34,3 +34,4 @@ features:
     announcements-enabled: false
     decisions-enabled: false
     documents-enabled: false
+    readiness-cache-ttl: 1s

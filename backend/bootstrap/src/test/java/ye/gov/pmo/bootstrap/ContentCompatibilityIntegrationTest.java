@@ -1,7 +1,9 @@
 package ye.gov.pmo.bootstrap;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ye.gov.pmo.bootstrap.backfill.BackfillApplyRequest;
 import ye.gov.pmo.bootstrap.backfill.ContentBackfillApplyService;
 import ye.gov.pmo.bootstrap.compatibility.ContentCompatibilityRouter;
+import ye.gov.pmo.bootstrap.compatibility.ContentCompatibilityObservability;
 import ye.gov.pmo.decisions.service.DecisionQuery;
 import ye.gov.pmo.decisions.service.DecisionService;
 import ye.gov.pmo.documents.service.DocumentQuery;
@@ -32,6 +35,8 @@ class ContentCompatibilityIntegrationTest {
     private ContentBackfillApplyService applyService;
     @Autowired
     private ContentCompatibilityRouter router;
+    @Autowired
+    private MeterRegistry meterRegistry;
     @Autowired
     private NewsQuery news;
     @Autowired
@@ -66,12 +71,22 @@ class ContentCompatibilityIntegrationTest {
         assertThat(decisions.findById(1L)).isEqualTo(expectedDecisions.getFirst());
         assertThat(documents.findAll()).isEqualTo(expectedDocuments);
         assertThat(documents.findById(1L)).isEqualTo(expectedDocuments.getFirst());
+        assertThatThrownBy(() -> news.findById(999L))
+                .isInstanceOf(org.springframework.web.server.ResponseStatusException.class);
 
         assertThat(router.status().comparisonError()).isNull();
         assertThat(router.status().contentTypes()).allSatisfy(type -> {
             assertThat(type.configuredForUnified()).isTrue();
             assertThat(type.shadowReady()).isTrue();
             assertThat(type.effectiveSource()).isEqualTo("UNIFIED");
+            assertThat(type.unifiedRequests()).isGreaterThanOrEqualTo(2);
+            assertThat(type.automaticFallbacks()).isZero();
         });
+        assertThat(meterRegistry.get(ContentCompatibilityObservability.REQUEST_METRIC)
+                .tag("content_type", "NEWS")
+                .tag("operation", "list")
+                .tag("source", "UNIFIED")
+                .tag("fallback_reason", "NONE")
+                .counter().count()).isEqualTo(1.0);
     }
 }

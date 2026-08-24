@@ -1,6 +1,6 @@
 # Phase 2 Implementation Record — Unified Government Content
 
-> **الحالة:** In progress — Slices 1–4, 5A, and 5B complete; compatibility flags remain legacy  
+> **الحالة:** In progress — Slices 1–4, 5A, 5B, and 5C-A complete; compatibility flags remain legacy
 > **التاريخ:** 2026-08-24  
 > **المرجع:** `PHASE_2_UNIFIED_CONTENT_PLAN.md`
 
@@ -147,7 +147,7 @@
 
 ## الخطوة التالية
 
-Slice 5C: تنفيذ canary تشغيلي تدريجي لنوع واحد بعد اعتماد خطة المراقبة والرجوع؛ لم يبدأ بعد.
+Slice 5C-B: تفعيل NEWS canary تشغيليًا بعد اعتماد مستقل؛ لم يبدأ بعد.
 
 ## Slice 5B — Compatibility facades without cutover
 
@@ -163,3 +163,15 @@ Slice 5C: تنفيذ canary تشغيلي تدريجي لنوع واحد بعد �
 - تحقق Docker/PostgreSQL: الأنواع الأربعة `shadowReady=true`، وكل flags مغلقة و`effectiveSource=LEGACY`؛ health وlegacy news يعيدان 200.
 
 راجع `PHASE_2_COMPATIBILITY_FACADES_RECORD.md` للتفاصيل وخطة التفعيل والرجوع.
+
+## Slice 5C-A — Canary observability and runbook
+
+- إضافة عداد وtimer عبر Micrometer لكل نوع وعملية ومصدر فعلي وسبب fallback، بوسوم ثابتة منخفضة cardinality.
+- إظهار request/fallback counters وأسبابها في واجهة الحالة الإدارية المحمية.
+- إضافة logging آمن لحالة فشل unified projection دون بيانات محتوى أو مستخدم.
+- تخزين نتيجة shadow readiness لمدة 30 ثانية افتراضيًا بدل تشغيل المقارنة الكاملة مع كل طلب، مع fail-closed إلى legacy عند الخطأ.
+- توثيق gates التفعيل والنجاح والrollback وترتيب الأنواع في `PHASE_2_CANARY_RUNBOOK.md`.
+- اختبار مسار unified ومسار `SHADOW_NOT_READY` fallback والتحقق من meters والعدادات.
+- لم يُفعّل أي canary، وبقيت كل flags مغلقة.
+- الاختبار الكامل: 55 bootstrap و6 content و14 identity؛ 75 اختبارًا ناجحًا دون failures أو errors.
+- تحقق Docker/PostgreSQL: كل الأنواع `shadowReady=true` و`effectiveSource=LEGACY`، وظهرت طلبات smoke في legacy counters مع صفر automatic fallbacks.
