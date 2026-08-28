@@ -1,7 +1,7 @@
 # Phase 2 Slice 5C — Content Canary Runbook
 
-> **Status:** NEWS canary active in local Docker; observation window in progress
-> **Date:** 2026-08-24
+> **Status:** NEWS graduated in local Docker only; ANNOUNCEMENT plan pending review and activation approval
+> **Date:** 2026-08-26
 > **Scope:** Existing read compatibility only. No write cutover, migration, deletion, or frontend redesign.
 
 ## 1. Purpose
@@ -102,9 +102,9 @@ Rollback affects reads only. Legacy administration remains the writer throughout
 
 ## 8. Current decision
 
-Explicit operational approval for NEWS only was granted on 2026-08-24. The local Docker backend has run with NEWS unified compatibility enabled since `2026-08-24T14:02:24Z`. Announcement, decision, and document compatibility remain disabled and effective on legacy reads.
+Explicit operational approval for NEWS only was granted on 2026-08-24. After all exit gates passed, the owner approved NEWS graduation on 2026-08-26 for the local Docker environment only. NEWS remains configured for unified compatibility and effectively `UNIFIED`. Announcement, decision, and document compatibility remain disabled and effective on `LEGACY` reads.
 
-This is a local operational canary, not evidence of a production deployment. The default configuration remains false, the database and write path are unchanged, and no later content type is authorized until NEWS completes the exit gates.
+This is not production approval. The database and write path remain unchanged, no write cutover is authorized, and no later content type is authorized. `ANNOUNCEMENT_CANARY_PLAN.md` is a review-only proposal and activation remains on `HOLD` until separate explicit approval.
 
 ## 9. Pre-activation verification record
 
@@ -126,3 +126,14 @@ This is a local operational canary, not evidence of a production deployment. The
 - Shadow state: 12/12 mapped, zero differences; NEWS count, order, and fields matched; portal-home content projection remained ready.
 - Security boundary: direct unified public read remained closed with 404 and anonymous actuator metrics remained protected with 401.
 - Earliest exit review: after `2026-08-25T14:02:24Z`, provided at least 100 NEWS compatibility requests and every exit gate are satisfied.
+
+## 11. NEWS local-graduation record
+
+- Owner decision date: `2026-08-26`.
+- Scope: local Docker environment only.
+- Technical basis: `NEWS_CANARY_EXIT_REVIEW.md` assessed every required exit gate `PASS` against the frozen baseline.
+- Known traffic: 158 cumulative NEWS compatibility requests across the documented process lifetimes.
+- Final routing retained: NEWS `configuredForUnified=true`, `shadowReady=true`, `effectiveSource=UNIFIED`.
+- Isolation retained: ANNOUNCEMENT, DECISION, and DOCUMENT `configuredForUnified=false`, `shadowReady=true`, `effectiveSource=LEGACY`.
+- Approval exclusions: no production approval, no write cutover, no database change, and no authorization to activate another type.
+- Next proposed step: review `ANNOUNCEMENT_CANARY_PLAN.md`; activation remains `HOLD`.

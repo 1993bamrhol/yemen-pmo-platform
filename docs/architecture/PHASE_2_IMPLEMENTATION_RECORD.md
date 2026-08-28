@@ -1,7 +1,7 @@
 # Phase 2 Implementation Record — Unified Government Content
 
-> **الحالة:** In progress — Slices 1–4, 5A, 5B, and 5C-A complete; Slice 5C-B NEWS canary active in local Docker
-> **التاريخ:** 2026-08-24  
+> **الحالة:** In progress — NEWS read compatibility graduated in local Docker only; ANNOUNCEMENT canary awaits review and activation approval
+> **التاريخ:** 2026-08-26
 > **المرجع:** `PHASE_2_UNIFIED_CONTENT_PLAN.md`
 
 ## Slice 1 — Schema and contracts
@@ -147,7 +147,7 @@
 
 ## الحالة التشغيلية الحالية
 
-Slice 5C-B: فُعّل NEWS canary فقط في Docker المحلي عند `2026-08-24T14:02:24Z` بعد اعتماد صريح؛ الأنواع الثلاثة الأخرى ما زالت على legacy.
+Slice 5C-B: تخرج NEWS read canary في Docker المحلي باعتماد صريح من المالك في `2026-08-26` بعد اجتياز جميع exit gates. بقي NEWS على `UNIFIED`، بينما بقيت ANNOUNCEMENT وDECISION وDOCUMENT على `LEGACY`. هذا اعتماد محلي فقط ولا يجيز production أو write cutover أو تفعيل نوع تالٍ.
 
 ## Slice 5B — Compatibility facades without cutover
 
@@ -185,3 +185,13 @@ Slice 5C-B: فُعّل NEWS canary فقط في Docker المحلي عند `2026-
 - بعد smoke الأولي: 3 unified requests، صفر automatic fallbacks، و12/12 mapping مع صفر فروقات.
 - بدأت نافذة المراقبة في `2026-08-24T14:02:24Z`. لا يُفعّل نوع آخر قبل مرور 24 ساعة، وصول NEWS إلى 100 طلب على الأقل، واجتياز exit gates.
 - التفعيل محلي وليس نشرًا على production، ولا يغيّر default flags أو قاعدة البيانات أو مسار الكتابة.
+
+## Slice 5C-B — NEWS local graduation
+
+- أتم NEWS أكثر من 24 ساعة وتجاوز حد 100 compatibility requests؛ بلغ الإجمالي المعروف 158 طلبًا عبر عمرَي العملية الموثقين.
+- أعاد `NEWS_CANARY_EXIT_REVIEW.md` نتيجة `PASS` لكل gates المعتمدة: العقود والمعرفات والترتيب وportal-home و5xx وp95 وshadow وdatabase pressure والعزل بين الأنواع.
+- اعتمد المالك نجاح وتخرج NEWS في بيئة Docker المحلية فقط في `2026-08-26`.
+- بقي NEWS على `configuredForUnified=true` و`effectiveSource=UNIFIED`؛ لم يتطلب تسجيل القرار أي تغيير في feature flags.
+- بقيت ANNOUNCEMENT وDECISION وDOCUMENT على `configuredForUnified=false` و`effectiveSource=LEGACY`.
+- لا يشمل القرار production، ولا يبدأ write cutover، ولا يجيز canary لاحقًا دون اعتماد منفصل.
+- أُعدت `ANNOUNCEMENT_CANARY_PLAN.md` للمراجعة فقط؛ حالة التفعيل `HOLD`.

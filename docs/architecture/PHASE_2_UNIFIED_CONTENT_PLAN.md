@@ -1,9 +1,9 @@
 # Phase 2 Plan — Unified Government Content
 
-> **الحالة:** Implementation in progress — Slices 1–4 and 5A complete; no compatibility cutover  
-> **التاريخ:** 2026-08-24  
+> **الحالة:** Implementation in progress — NEWS read compatibility graduated in local Docker only; no write cutover
+> **التاريخ:** 2026-08-26
 > **يعتمد على:** `UNIFIED_GOVERNMENT_PORTAL_IA_V1.md`، `adr/0005-unified-government-content.md`، وPhase 1  
-> **سجل التنفيذ:** راجع `PHASE_2_IMPLEMENTATION_RECORD.md`. نُفذ backfill؛ لم ينفذ compatibility cutover حتى الآن.
+> **سجل التنفيذ:** راجع `PHASE_2_IMPLEMENTATION_RECORD.md`. نُفذ backfill، وتخرج NEWS read compatibility محليًا؛ لم يبدأ write cutover ولم يعتمد production.
 
 ## 1. الهدف
 
@@ -371,7 +371,7 @@ POST /api/v1/admin/content/{contentId}/attachments
 - **Slice 5A مكتملة في 2026-08-24:** shadow comparison أعاد 12/12 وصفر فروقات على PostgreSQL؛ لم يُحوّل أي endpoint.
 - **Slice 5B مكتملة في 2026-08-24:** facades ومفاتيح مستقلة لكل نوع جاهزة، مع شرط shadow وfallback تلقائي؛ بقيت جميع المفاتيح مغلقة ولم يبدأ canary.
 - **Slice 5C-A مكتملة في 2026-08-24:** observability وعدادات fallback وreadiness cache وrunbook جاهزة.
-- **Slice 5C-B قيد المراقبة منذ 2026-08-24:** NEWS تعمل من unified store في Docker المحلي بعد اعتماد صريح، بينما بقيت الأنواع الأخرى على legacy؛ لا انتقال تالٍ قبل اكتمال نافذة 24 ساعة وexit gates.
+- **Slice 5C-B تخرجت محليًا في 2026-08-26:** اجتازت NEWS جميع exit gates واعتمد المالك تخرجها في Docker المحلي فقط؛ بقيت على unified reads وبقيت الأنواع الأخرى على legacy. خطة ANNOUNCEMENT جاهزة للمراجعة فقط، ولا تفعيل قبل اعتماد صريح مستقل.
 
 ### Slice 6 — Stabilization
 
