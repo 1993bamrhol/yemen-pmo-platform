@@ -16,8 +16,8 @@ export class ApiError extends Error {
 }
 
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
-  // Keep public pages responsive when the API is unavailable. The UI has
-  // vetted local fallback content, so a long blocking timeout adds no value.
+  // Keep public pages responsive when the API is unavailable. Each data-fed
+  // section owns its explicit loading, empty, and error presentation.
   const timeoutMs = typeof window === "undefined" ? 1_500 : 10_000;
   const response = await fetch(`${getBaseUrl()}${path}`, {
     cache: "no-store",
@@ -107,6 +107,30 @@ export type DocumentItem = {
   description: string;
 };
 
+export type EntityTypeItem = {
+  id: number;
+  code: string;
+  name: string;
+  pathSegment: string;
+};
+
+export type GovernmentEntityItem = {
+  canonicalPath: string;
+  description?: string | null;
+  id: string;
+  officialName: string;
+  parent?: {
+    canonicalPath: string;
+    id: string;
+    officialName: string;
+  } | null;
+  shortName?: string | null;
+  slug: string;
+  status: string;
+  type?: EntityTypeItem | null;
+  websiteUrl?: string | null;
+};
+
 export const api = {
   login: (payload: AuthLoginRequest) =>
     request<AuthSession>("/api/auth/login", {
@@ -127,6 +151,8 @@ export const api = {
   getDecisionById: (id: number) => request<DecisionItem>(`/api/decisions/${id}`),
   getDocuments: () => request<DocumentItem[]>("/api/documents"),
   getDocumentById: (id: number) => request<DocumentItem>(`/api/documents/${id}`),
+  getGovernmentEntities: () =>
+    request<GovernmentEntityItem[]>("/api/v1/entities"),
   getPortalHome: () => request<PortalHomeContent>("/api/portal/home"),
   submitSupportRequest: (payload: SupportSubmission) =>
     request<SupportResponse>("/api/support/requests", {

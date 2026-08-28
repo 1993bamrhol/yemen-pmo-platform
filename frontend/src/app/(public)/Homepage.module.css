@@ -1,0 +1,189 @@
+.hero {
+  background: var(--yegov-color-bg-interaction-subtle);
+  border-block-end: var(--yegov-border-width-default) solid
+    var(--yegov-color-border-subtle);
+  overflow: hidden;
+}
+
+.heroContainer {
+  align-items: center;
+  display: grid;
+  min-block-size: 30rem;
+  padding-block: var(--yegov-space-5xl);
+  position: relative;
+}
+
+.heroCopy {
+  display: grid;
+  gap: var(--yegov-space-base);
+  max-inline-size: 48rem;
+  min-inline-size: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.nationalMark {
+  align-items: center;
+  display: flex;
+  gap: var(--yegov-space-sm);
+  inline-size: max-content;
+}
+
+.nationalMarkRed,
+.nationalMarkBlue {
+  block-size: var(--yegov-space-xs);
+  border-radius: var(--yegov-radius-full);
+  display: block;
+}
+
+.nationalMarkRed {
+  background: var(--yegov-color-national-accent-default);
+  inline-size: var(--yegov-space-xl);
+}
+
+.nationalMarkBlue {
+  background: var(--yegov-color-action-primary-bg-default);
+  inline-size: var(--yegov-space-5xl);
+}
+
+.heroTitle,
+.heroDescription,
+.engagementTitle,
+.engagementDescription {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.heroTitle {
+  color: var(--yegov-color-text-primary);
+  font-size: clamp(2rem, 1.55rem + 2vw, 3.5rem);
+  font-weight: var(--yegov-font-weight-bold);
+  line-height: 1.35;
+  max-inline-size: 44rem;
+}
+
+.heroDescription {
+  color: var(--yegov-color-text-secondary);
+  font-size: 1.125rem;
+  line-height: 2rem;
+  max-inline-size: 42rem;
+}
+
+.searchUnavailable {
+  margin-block-start: var(--yegov-space-xl);
+  max-inline-size: 44rem;
+}
+
+.heroMotif {
+  background: url("/icons/yegov-footer-arch-desktop.svg") center / contain
+    no-repeat;
+  block-size: 7.5rem;
+  inline-size: 13.5rem;
+  inset-block-end: var(--yegov-space-4xl);
+  inset-inline-start: 0;
+  opacity: 0.9;
+  position: absolute;
+}
+
+.entitiesSection,
+.openGovernmentSection {
+  border-block: var(--yegov-border-width-default) solid
+    var(--yegov-color-border-subtle);
+}
+
+.engagementGrid {
+  display: grid;
+  gap: var(--yegov-layout-gutter-mobile);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.engagementPanel {
+  align-content: start;
+  background: var(--yegov-color-bg-surface);
+  border: var(--yegov-border-width-default) solid
+    var(--yegov-color-border-default);
+  border-radius: var(--yegov-radius-lg);
+  display: grid;
+  gap: var(--yegov-space-base);
+  min-inline-size: 0;
+  padding: var(--yegov-space-2xl);
+}
+
+.engagementPanel > :first-child {
+  justify-self: start;
+}
+
+.engagementTitle {
+  color: var(--yegov-color-text-primary);
+  font-size: 1.25rem;
+  font-weight: var(--yegov-font-weight-semibold);
+  line-height: 2rem;
+}
+
+.engagementDescription {
+  color: var(--yegov-color-text-secondary);
+  font-size: 1rem;
+  line-height: 1.75rem;
+}
+
+.engagementPanel > :last-child:is(a) {
+  justify-self: start;
+  margin-block-start: auto;
+}
+
+@media (min-width: 768px) {
+  .heroContainer {
+    min-block-size: 32rem;
+    padding-block: var(--yegov-space-6xl);
+  }
+
+  .heroCopy {
+    inline-size: min(72%, 48rem);
+  }
+
+  .heroMotif {
+    block-size: 10rem;
+    inline-size: 18rem;
+    inset-block-end: auto;
+    inset-block-start: 50%;
+    transform: translateY(-50%);
+  }
+
+  .engagementGrid {
+    gap: var(--yegov-layout-gutter-tablet);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .engagementGrid {
+    gap: var(--yegov-layout-gutter-desktop);
+  }
+}
+
+@media (max-width: 479px) {
+  .heroContainer {
+    min-block-size: 26rem;
+    padding-block: var(--yegov-space-4xl);
+  }
+
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .heroDescription {
+    font-size: 1rem;
+    line-height: 1.75rem;
+  }
+
+  .heroMotif {
+    background-image: url("/icons/yegov-footer-arch-mobile.svg");
+    block-size: 3.375rem;
+    inline-size: 6rem;
+    inset-block-end: var(--yegov-space-xl);
+  }
+
+  .engagementPanel {
+    padding: var(--yegov-space-xl);
+  }
+}
