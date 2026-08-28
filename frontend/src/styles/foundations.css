@@ -1,0 +1,168 @@
+html {
+  color-scheme: light;
+  font-family: var(--yegov-font-family-arabic);
+  font-synthesis: none;
+  text-size-adjust: 100%;
+}
+
+body {
+  text-align: start;
+}
+
+:where([dir="ltr"]) {
+  font-family: var(--yegov-font-family-latin);
+}
+
+:where(bdi, [dir="auto"]) {
+  unicode-bidi: plaintext;
+}
+
+:where(.container, .yegov-container) {
+  width: min(
+    var(--yegov-layout-container-max),
+    calc(100% - (var(--yegov-layout-margin-mobile) * 2))
+  );
+  margin-inline: auto;
+}
+
+/* Tablet breakpoint: 768px. */
+@media (min-width: 768px) {
+  :where(.container, .yegov-container) {
+    width: min(
+      var(--yegov-layout-container-max),
+      calc(100% - (var(--yegov-layout-margin-tablet) * 2))
+    );
+  }
+}
+
+/* Desktop breakpoint: 1200px. */
+@media (min-width: 1200px) {
+  :where(.container, .yegov-container) {
+    width: min(
+      var(--yegov-layout-container-max),
+      calc(100% - (var(--yegov-layout-margin-desktop) * 2))
+    );
+  }
+}
+
+:where(
+  a,
+  button,
+  summary,
+  input,
+  select,
+  textarea,
+  [tabindex]:not([tabindex="-1"])
+):focus-visible {
+  outline: var(--yegov-focus-ring-width) solid var(--yegov-color-border-focus);
+  outline-offset: var(--yegov-focus-ring-offset);
+}
+
+@media (forced-colors: active) {
+  :where(
+    a,
+    button,
+    summary,
+    input,
+    select,
+    textarea,
+    [tabindex]:not([tabindex="-1"])
+  ):focus-visible {
+    outline-color: Highlight;
+  }
+}
+
+/* Typography recipes map the approved Figma Text Styles without token sprawl. */
+.yegov-type-display-xl {
+  margin-block: 0;
+  font-size: 3.5rem;
+  font-weight: var(--yegov-font-weight-bold);
+  line-height: 4.5rem;
+}
+
+.yegov-type-display-lg {
+  margin-block: 0;
+  font-size: 3rem;
+  font-weight: var(--yegov-font-weight-bold);
+  line-height: 4rem;
+}
+
+.yegov-type-heading-h1 {
+  margin-block: 0;
+  font-size: 2.5rem;
+  font-weight: var(--yegov-font-weight-bold);
+  line-height: 3.25rem;
+}
+
+.yegov-type-heading-h2 {
+  margin-block: 0;
+  font-size: 2rem;
+  font-weight: var(--yegov-font-weight-bold);
+  line-height: 2.75rem;
+}
+
+.yegov-type-heading-h3 {
+  margin-block: 0;
+  font-size: 1.5rem;
+  font-weight: var(--yegov-font-weight-semibold);
+  line-height: 2.25rem;
+}
+
+.yegov-type-heading-h4 {
+  margin-block: 0;
+  font-size: 1.25rem;
+  font-weight: var(--yegov-font-weight-semibold);
+  line-height: 2rem;
+}
+
+.yegov-type-body-lg {
+  font-size: 1.125rem;
+  font-weight: var(--yegov-font-weight-regular);
+  line-height: 2rem;
+}
+
+.yegov-type-body-md {
+  font-size: 1rem;
+  font-weight: var(--yegov-font-weight-regular);
+  line-height: 1.75rem;
+}
+
+.yegov-type-body-sm {
+  font-size: 0.875rem;
+  font-weight: var(--yegov-font-weight-regular);
+  line-height: 1.5rem;
+}
+
+.yegov-type-label-lg {
+  font-size: 1rem;
+  font-weight: var(--yegov-font-weight-semibold);
+  line-height: 1.5rem;
+}
+
+.yegov-type-label-md {
+  font-size: 0.875rem;
+  font-weight: var(--yegov-font-weight-semibold);
+  line-height: 1.25rem;
+}
+
+.yegov-type-label-sm {
+  font-size: 0.75rem;
+  font-weight: var(--yegov-font-weight-semibold);
+  line-height: 1.125rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: var(--yegov-motion-duration-reduced) !important;
+    animation-duration: var(--yegov-motion-duration-reduced) !important;
+    animation-delay: var(--yegov-motion-duration-reduced) !important;
+    animation-iteration-count: 1 !important;
+  }
+}

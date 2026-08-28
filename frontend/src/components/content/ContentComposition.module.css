@@ -1,0 +1,279 @@
+.cardGrid {
+  display: grid;
+  gap: var(--yegov-layout-gutter-mobile);
+  grid-template-columns: minmax(0, 1fr);
+  list-style: none;
+  margin: 0;
+  min-inline-size: 0;
+  padding: 0;
+}
+
+.cardGridItem {
+  display: flex;
+  min-inline-size: 0;
+}
+
+.card {
+  background: var(--yegov-color-bg-surface);
+  border: var(--yegov-border-width-default) solid var(--yegov-color-border-default);
+  border-radius: var(--yegov-radius-lg);
+  color: var(--yegov-color-text-primary);
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--yegov-space-base);
+  inline-size: 100%;
+  min-inline-size: 0;
+  padding: var(--yegov-space-2xl);
+  text-align: start;
+}
+
+.cardLink {
+  text-decoration: none;
+  transition:
+    border-color var(--yegov-motion-duration-fast) var(--yegov-motion-easing-standard),
+    box-shadow var(--yegov-motion-duration-fast) var(--yegov-motion-easing-standard),
+    transform var(--yegov-motion-duration-fast) var(--yegov-motion-easing-standard);
+}
+
+.cardLink:hover {
+  border-color: var(--yegov-color-action-secondary-border);
+  box-shadow: var(--yegov-elevation-200);
+}
+
+.cardLink:active {
+  border-color: var(--yegov-color-text-link-active);
+  box-shadow: var(--yegov-elevation-100);
+  transform: translateY(var(--yegov-space-2xs));
+}
+
+.cardMetaRow {
+  align-items: center;
+  display: flex;
+  gap: var(--yegov-space-md);
+  min-block-size: var(--yegov-touch-target-mobile);
+  min-inline-size: 0;
+}
+
+.cardIcon,
+.statusIcon,
+.actionIcon {
+  background-color: currentColor;
+  display: inline-block;
+  flex: 0 0 auto;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+}
+
+.cardIcon {
+  block-size: var(--yegov-icon-md);
+  color: var(--yegov-color-text-primary);
+  inline-size: var(--yegov-icon-md);
+}
+
+.serviceIcon {
+  mask-image: url("/icons/yegov-service.svg");
+}
+
+.entityIcon {
+  mask-image: url("/icons/yegov-building.svg");
+}
+
+.contentIcon {
+  mask-image: url("/icons/yegov-document.svg");
+}
+
+.infoIcon {
+  mask-image: url("/icons/yegov-info.svg");
+}
+
+.errorIcon {
+  mask-image: url("/icons/yegov-error.svg");
+}
+
+.metadata {
+  align-items: center;
+  color: var(--yegov-color-text-subtle);
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  font-size: 0.875rem;
+  gap: var(--yegov-space-xs) var(--yegov-space-sm);
+  line-height: 1.5rem;
+  list-style: none;
+  margin: 0;
+  min-inline-size: 0;
+  padding: 0;
+}
+
+.metadataItem {
+  align-items: center;
+  display: inline-flex;
+  gap: var(--yegov-space-sm);
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+.metadataItem:not(:last-child)::after {
+  color: var(--yegov-color-border-strong);
+  content: "•";
+}
+
+.cardCopy {
+  display: grid;
+  gap: var(--yegov-space-sm);
+  min-inline-size: 0;
+}
+
+.cardTitle,
+.cardDescription {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: var(--yegov-font-weight-semibold);
+  line-height: 2rem;
+}
+
+.cardDescription {
+  color: var(--yegov-color-text-secondary);
+  font-size: 1rem;
+  line-height: 1.75rem;
+}
+
+.cardAction {
+  align-items: center;
+  color: var(--yegov-color-text-link);
+  display: inline-flex;
+  font-size: 0.875rem;
+  font-weight: var(--yegov-font-weight-semibold);
+  gap: var(--yegov-space-sm);
+  line-height: 1.25rem;
+  margin-block-start: auto;
+  min-block-size: var(--yegov-touch-target-mobile);
+}
+
+.cardLink:hover .cardAction {
+  color: var(--yegov-color-text-link-hover);
+}
+
+.cardLink:active .cardAction {
+  color: var(--yegov-color-text-link-active);
+}
+
+.actionIcon {
+  block-size: var(--yegov-icon-sm);
+  inline-size: var(--yegov-icon-sm);
+  mask-image: url("/icons/yegov-arrow-left.svg");
+}
+
+:global([dir="ltr"]) .actionIcon {
+  transform: scaleX(-1);
+}
+
+.statusIcon {
+  block-size: var(--yegov-icon-md);
+  inline-size: var(--yegov-icon-md);
+}
+
+.state {
+  min-inline-size: 0;
+}
+
+.loadingState {
+  display: grid;
+  gap: var(--yegov-space-base);
+}
+
+.skeletonCard {
+  pointer-events: none;
+}
+
+.skeletonLine,
+.skeletonIcon {
+  animation: skeleton-pulse var(--yegov-motion-duration-slow) var(--yegov-motion-easing-standard) infinite alternate;
+  background: var(--yegov-color-bg-surface-subtle);
+  border-radius: var(--yegov-radius-sm);
+}
+
+.skeletonMeta {
+  align-items: center;
+  display: flex;
+  gap: var(--yegov-space-md);
+  min-block-size: var(--yegov-touch-target-mobile);
+}
+
+.skeletonIcon {
+  block-size: var(--yegov-icon-md);
+  inline-size: var(--yegov-icon-md);
+}
+
+.skeletonLine {
+  block-size: var(--yegov-space-base);
+  inline-size: 100%;
+  max-inline-size: 18rem;
+}
+
+.skeletonLineShort {
+  inline-size: 42%;
+}
+
+.skeletonLineMedium {
+  inline-size: 68%;
+}
+
+.visuallyHidden {
+  block-size: 1px;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  inline-size: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+}
+
+@keyframes skeleton-pulse {
+  from {
+    opacity: 0.55;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (min-width: 768px) {
+  .cardGrid {
+    gap: var(--yegov-layout-gutter-tablet);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .cardGrid {
+    gap: var(--yegov-layout-gutter-desktop);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeletonLine,
+  .skeletonIcon {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .card {
+    border-color: CanvasText;
+  }
+
+  .cardIcon,
+  .statusIcon,
+  .actionIcon {
+    background-color: CanvasText;
+  }
+}

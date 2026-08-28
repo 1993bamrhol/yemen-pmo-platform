@@ -1,0 +1,119 @@
+.container {
+  inline-size: min(
+    var(--yegov-layout-container-max),
+    calc(100% - (var(--yegov-layout-margin-mobile) * 2))
+  );
+  margin-inline: auto;
+  min-inline-size: 0;
+}
+.section {
+  padding-block: var(--yegov-space-3xl);
+}
+
+.section[data-spacing="compact"] {
+  padding-block: var(--yegov-space-xl);
+}
+
+.section[data-spacing="roomy"] {
+  padding-block: var(--yegov-space-5xl);
+}
+
+.section[data-tone="subtle"] {
+  background: var(--yegov-color-bg-surface-subtle);
+}
+
+.sectionHeader {
+  align-items: start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--yegov-space-base) var(--yegov-space-xl);
+  justify-content: space-between;
+  margin-block-end: var(--yegov-space-xl);
+}
+
+.sectionHeaderCopy {
+  display: grid;
+  gap: var(--yegov-space-sm);
+  max-inline-size: 48rem;
+  min-inline-size: 0;
+}
+
+.eyebrow {
+  color: var(--yegov-color-national-accent-text);
+  font-size: 0.875rem;
+  font-weight: var(--yegov-font-weight-semibold);
+  line-height: 1.5rem;
+  margin: 0;
+}
+
+.heading {
+  color: var(--yegov-color-text-primary);
+  font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+  font-weight: var(--yegov-font-weight-bold);
+  line-height: 1.45;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.description {
+  color: var(--yegov-color-text-secondary);
+  font-size: 1rem;
+  line-height: 1.75rem;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.action {
+  flex: 0 0 auto;
+}
+
+.skipLink {
+  background: var(--yegov-color-action-primary-bg-default);
+  border-radius: var(--yegov-radius-md);
+  color: var(--yegov-color-action-primary-text);
+  font-weight: var(--yegov-font-weight-semibold);
+  inset-block-start: var(--yegov-space-base);
+  inset-inline-start: var(--yegov-space-base);
+  min-block-size: var(--yegov-touch-target-mobile);
+  padding: var(--yegov-space-md) var(--yegov-space-base);
+  position: fixed;
+  transform: translateY(calc(-100% - var(--yegov-space-2xl)));
+  transition: transform var(--yegov-motion-duration-fast) var(--yegov-motion-easing-standard);
+  z-index: 1000;
+}
+
+.skipLink:focus-visible {
+  transform: translateY(0);
+}
+
+@media (min-width: 768px) {
+  .container {
+    inline-size: min(
+      var(--yegov-layout-container-max),
+      calc(100% - (var(--yegov-layout-margin-tablet) * 2))
+    );
+  }
+
+  .section {
+    padding-block: var(--yegov-space-4xl);
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    inline-size: min(
+      var(--yegov-layout-container-max),
+      calc(100% - (var(--yegov-layout-margin-desktop) * 2))
+    );
+  }
+}
+
+@media (max-width: 479px) {
+  .sectionHeader {
+    display: grid;
+  }
+
+  .action {
+    inline-size: 100%;
+  }
+}

@@ -1,0 +1,171 @@
+.field {
+  display: grid;
+  gap: var(--yegov-space-xs);
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.label {
+  align-items: center;
+  color: var(--yegov-color-text-primary);
+  display: flex;
+  font-size: 0.75rem;
+  font-weight: var(--yegov-font-weight-semibold);
+  line-height: 1.125rem;
+  min-block-size: 1.75rem;
+  overflow-wrap: anywhere;
+}
+
+.controlWrap {
+  min-inline-size: 0;
+  position: relative;
+}
+
+.control,
+.select,
+.textarea {
+  appearance: none;
+  background: var(--yegov-color-bg-surface);
+  border: var(--yegov-border-width-default) solid var(--yegov-color-border-default);
+  border-radius: var(--yegov-radius-md);
+  color: var(--yegov-color-text-primary);
+  font: inherit;
+  font-size: 1rem;
+  inline-size: 100%;
+  line-height: 1.75rem;
+  min-inline-size: 0;
+  padding-inline: var(--yegov-space-base);
+  text-align: start;
+  transition:
+    background-color var(--yegov-motion-duration-fast) var(--yegov-motion-easing-standard),
+    border-color var(--yegov-motion-duration-fast) var(--yegov-motion-easing-standard);
+}
+
+.control,
+.select {
+  block-size: var(--yegov-touch-target-mobile);
+}
+
+.textarea {
+  min-block-size: 8rem;
+  padding-block: var(--yegov-space-md);
+  resize: vertical;
+}
+
+.withAdornment {
+  padding-inline-end: 3rem;
+}
+
+.control::placeholder,
+.textarea::placeholder {
+  color: var(--yegov-color-text-subtle);
+  opacity: 1;
+}
+
+@media (hover: hover) {
+  .control:hover:not(:disabled):not([readonly]),
+  .select:hover:not(:disabled),
+  .textarea:hover:not(:disabled):not([readonly]) {
+    border-color: var(--yegov-color-border-strong);
+  }
+}
+
+.control[aria-invalid="true"],
+.select[aria-invalid="true"],
+.textarea[aria-invalid="true"] {
+  background: var(--yegov-color-feedback-error-bg);
+  border-color: var(--yegov-color-feedback-error-border);
+  color: var(--yegov-color-feedback-error-text);
+}
+
+.field[data-invalid="true"] .label,
+.field[data-invalid="true"] .message {
+  color: var(--yegov-color-feedback-error-text);
+}
+
+.control:disabled,
+.select:disabled,
+.textarea:disabled {
+  background: var(--yegov-color-action-disabled-bg);
+  border-color: var(--yegov-color-border-subtle);
+  color: var(--yegov-color-text-disabled);
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.select[data-loading="true"]:disabled {
+  background: var(--yegov-color-bg-surface);
+  border-color: var(--yegov-color-border-default);
+  color: var(--yegov-color-text-primary);
+  cursor: progress;
+}
+
+.control[readonly][aria-busy="true"],
+.textarea[readonly][aria-busy="true"] {
+  cursor: progress;
+}
+
+.message {
+  color: var(--yegov-color-text-subtle);
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  min-block-size: 1.75rem;
+  overflow-wrap: anywhere;
+}
+
+.adornment {
+  align-items: center;
+  block-size: var(--yegov-icon-md);
+  display: flex;
+  inline-size: var(--yegov-icon-md);
+  inset-block-start: 50%;
+  inset-inline-end: var(--yegov-space-base);
+  justify-content: center;
+  pointer-events: none;
+  position: absolute;
+  transform: translateY(-50%);
+}
+
+.searchIcon,
+.chevronIcon {
+  background-color: var(--yegov-color-text-primary);
+  block-size: var(--yegov-icon-md);
+  display: block;
+  inline-size: var(--yegov-icon-md);
+}
+
+.searchIcon {
+  mask: url("/icons/yegov-search.svg") center / contain no-repeat;
+}
+
+.chevronIcon {
+  mask: url("/icons/yegov-chevron-down.svg") center / contain no-repeat;
+}
+
+.spinner {
+  animation: yegov-field-spin var(--yegov-motion-duration-slow) linear infinite;
+  background-color: var(--yegov-color-text-primary);
+  block-size: var(--yegov-icon-md);
+  display: block;
+  inline-size: var(--yegov-icon-md);
+  mask: url("/icons/yegov-spinner.svg") center / contain no-repeat;
+}
+
+@keyframes yegov-field-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .searchIcon,
+  .chevronIcon {
+    forced-color-adjust: auto;
+  }
+}

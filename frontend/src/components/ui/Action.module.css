@@ -1,0 +1,181 @@
+.button,
+.iconButton,
+.textLink {
+  --action-background: transparent;
+  --action-background-hover: transparent;
+  --action-background-active: transparent;
+  --action-border: transparent;
+  --action-border-hover: transparent;
+  --action-text: var(--yegov-color-text-link);
+
+  align-items: center;
+  background: var(--action-background);
+  border: var(--yegov-border-width-default) solid var(--action-border);
+  color: var(--action-text);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: var(--yegov-font-weight-semibold);
+  gap: var(--yegov-space-sm);
+  justify-content: center;
+  line-height: 1.25rem;
+  min-block-size: var(--yegov-touch-target-mobile);
+  text-align: center;
+  text-decoration: none;
+  transition:
+    background-color var(--yegov-motion-duration-fast) var(--yegov-motion-easing-standard),
+    border-color var(--yegov-motion-duration-fast) var(--yegov-motion-easing-standard),
+    color var(--yegov-motion-duration-fast) var(--yegov-motion-easing-standard);
+}
+
+.button {
+  border-radius: var(--yegov-radius-full);
+  padding-block: var(--yegov-space-sm);
+  padding-inline: var(--yegov-space-base);
+}
+
+.iconButton {
+  block-size: var(--yegov-touch-target-mobile);
+  border-radius: var(--yegov-radius-full);
+  inline-size: var(--yegov-touch-target-mobile);
+  padding: var(--yegov-space-md);
+}
+
+.textLink {
+  border-radius: var(--yegov-radius-md);
+  padding-inline: var(--yegov-space-sm);
+  text-decoration-line: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.2em;
+}
+
+.primary {
+  --action-background: var(--yegov-color-action-primary-bg-default);
+  --action-background-hover: var(--yegov-color-action-primary-bg-hover);
+  --action-background-active: var(--yegov-color-action-primary-bg-active);
+  --action-border: var(--yegov-color-action-primary-bg-default);
+  --action-border-hover: var(--yegov-color-action-primary-bg-hover);
+  --action-text: var(--yegov-color-action-primary-text);
+}
+
+.secondary {
+  --action-background: var(--yegov-color-action-secondary-bg);
+  --action-background-hover: var(--yegov-color-action-secondary-bg-hover);
+  --action-background-active: var(--yegov-color-bg-interaction-subtle);
+  --action-border: var(--yegov-color-action-secondary-border);
+  --action-border-hover: var(--yegov-color-text-link-hover);
+  --action-text: var(--yegov-color-action-secondary-text);
+}
+
+.ghost {
+  --action-background-hover: var(--yegov-color-bg-interaction-subtle);
+  --action-background-active: var(--yegov-color-bg-interaction-subtle);
+  --action-text: var(--yegov-color-text-link);
+}
+
+.mutedLink {
+  --action-text: var(--yegov-color-text-secondary);
+}
+
+.inverseLink {
+  --action-text: var(--yegov-color-text-inverse);
+}
+
+@media (hover: hover) {
+  .button:hover:not(:disabled),
+  .iconButton:hover:not(:disabled),
+  .textLink:hover {
+    background: var(--action-background-hover);
+    border-color: var(--action-border-hover);
+  }
+
+  .textLink:hover {
+    color: var(--yegov-color-text-link-hover);
+  }
+
+  .inverseLink:hover {
+    color: var(--yegov-color-text-inverse);
+  }
+}
+
+.button:active:not(:disabled),
+.iconButton:active:not(:disabled),
+.textLink:active {
+  background: var(--action-background-active);
+}
+
+.textLink:active {
+  color: var(--yegov-color-text-link-active);
+}
+
+.inverseLink:active {
+  color: var(--yegov-color-text-inverse);
+}
+
+.button:disabled,
+.iconButton:disabled {
+  --action-background: var(--yegov-color-action-disabled-bg);
+  --action-border: var(--yegov-color-action-disabled-bg);
+  --action-text: var(--yegov-color-action-disabled-text);
+
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.primary[data-loading="true"]:disabled {
+  --action-background: var(--yegov-color-action-primary-bg-default);
+  --action-border: var(--yegov-color-action-primary-bg-default);
+  --action-text: var(--yegov-color-action-primary-text);
+
+  cursor: progress;
+}
+
+.secondary[data-loading="true"]:disabled {
+  --action-background: var(--yegov-color-action-secondary-bg);
+  --action-border: var(--yegov-color-action-secondary-border);
+  --action-text: var(--yegov-color-action-secondary-text);
+
+  cursor: progress;
+}
+
+.ghost[data-loading="true"]:disabled {
+  --action-background: transparent;
+  --action-border: transparent;
+  --action-text: var(--yegov-color-text-link);
+
+  cursor: progress;
+}
+
+.content {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+.icon {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 auto;
+  justify-content: center;
+}
+
+.spinner {
+  animation: yegov-action-spin var(--yegov-motion-duration-slow) linear infinite;
+  background-color: currentColor;
+  block-size: var(--yegov-icon-md);
+  flex: 0 0 auto;
+  inline-size: var(--yegov-icon-md);
+  mask: url("/icons/yegov-spinner.svg") center / contain no-repeat;
+}
+
+@keyframes yegov-action-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}

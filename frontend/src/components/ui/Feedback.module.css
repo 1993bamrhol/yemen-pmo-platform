@@ -1,0 +1,112 @@
+.badge,
+.alert {
+  --feedback-background: var(--yegov-color-bg-surface-subtle);
+  --feedback-border: var(--yegov-color-border-default);
+  --feedback-text: var(--yegov-color-text-secondary);
+
+  background: var(--feedback-background);
+  border: var(--yegov-border-width-default) solid var(--feedback-border);
+  color: var(--feedback-text);
+}
+
+.badge {
+  align-items: center;
+  border-radius: var(--yegov-radius-full);
+  display: inline-flex;
+  font-size: 0.75rem;
+  font-weight: var(--yegov-font-weight-semibold);
+  justify-content: center;
+  line-height: 1.125rem;
+  min-block-size: 2rem;
+  overflow-wrap: anywhere;
+  padding-inline: var(--yegov-space-sm);
+  text-align: center;
+}
+
+.alert {
+  align-items: start;
+  border-radius: var(--yegov-radius-md);
+  display: grid;
+  gap: var(--yegov-space-md);
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  inline-size: 100%;
+  min-inline-size: 0;
+  padding: var(--yegov-space-base);
+}
+
+.info {
+  --feedback-background: var(--yegov-color-feedback-info-bg);
+  --feedback-border: var(--yegov-color-feedback-info-border);
+  --feedback-text: var(--yegov-color-feedback-info-text);
+}
+
+.success {
+  --feedback-background: var(--yegov-color-feedback-success-bg);
+  --feedback-border: var(--yegov-color-feedback-success-border);
+  --feedback-text: var(--yegov-color-feedback-success-text);
+}
+
+.warning {
+  --feedback-background: var(--yegov-color-feedback-warning-bg);
+  --feedback-border: var(--yegov-color-feedback-warning-border);
+  --feedback-text: var(--yegov-color-feedback-warning-text);
+}
+
+.error {
+  --feedback-background: var(--yegov-color-feedback-error-bg);
+  --feedback-border: var(--yegov-color-feedback-error-border);
+  --feedback-text: var(--yegov-color-feedback-error-text);
+}
+
+.outline {
+  --feedback-background: var(--yegov-color-bg-surface);
+}
+
+.iconSlot {
+  align-items: center;
+  block-size: var(--yegov-icon-lg);
+  display: flex;
+  inline-size: var(--yegov-icon-lg);
+  justify-content: center;
+}
+
+.alertContent {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+.alertTitle {
+  font-size: 1rem;
+  font-weight: var(--yegov-font-weight-semibold);
+  line-height: 1.5rem;
+  margin: 0;
+}
+
+.alertBody {
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  margin-block: var(--yegov-space-xs) 0;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+.alertAction {
+  align-items: start;
+  display: flex;
+  justify-content: end;
+  min-inline-size: 0;
+}
+
+@media (max-width: 359px) {
+  .alert {
+    gap: var(--yegov-space-sm);
+    padding: var(--yegov-space-md);
+  }
+}
+
+@media (forced-colors: active) {
+  .badge,
+  .alert {
+    border-color: CanvasText;
+  }
+}

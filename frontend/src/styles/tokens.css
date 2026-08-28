@@ -1,0 +1,158 @@
+:root {
+  color-scheme: light;
+
+  /*
+   * Phase 5 / Batch 1
+   * Only the primitive dependency closure needed by the approved semantic
+   * foundations is emitted here. Pages and components must consume semantic
+   * tokens, never primitive tokens directly.
+   */
+  --yegov-primitive-white: #ffffff;
+  --yegov-primitive-civic-blue-50: #f0f7fc;
+  --yegov-primitive-civic-blue-500: #167fc4;
+  --yegov-primitive-civic-blue-700: #005a96;
+  --yegov-primitive-civic-blue-800: #064b78;
+  --yegov-primitive-civic-blue-900: #0b3d60;
+  --yegov-primitive-national-red-50: #fff4f5;
+  --yegov-primitive-national-red-500: #c83d51;
+  --yegov-primitive-national-red-700: #8d1b2d;
+  --yegov-primitive-national-red-800: #751829;
+  --yegov-primitive-national-red-900: #611827;
+  --yegov-primitive-neutral-50: #f7f8fa;
+  --yegov-primitive-neutral-100: #f1f3f5;
+  --yegov-primitive-neutral-200: #e3e7eb;
+  --yegov-primitive-neutral-300: #cbd2d9;
+  --yegov-primitive-neutral-500: #66717d;
+  --yegov-primitive-neutral-600: #4a5561;
+  --yegov-primitive-neutral-700: #343d46;
+  --yegov-primitive-neutral-900: #161b22;
+  --yegov-primitive-neutral-950: #0b0e12;
+  --yegov-primitive-success-50: #effaf4;
+  --yegov-primitive-success-600: #23865b;
+  --yegov-primitive-success-900: #0e3d27;
+  --yegov-primitive-warning-50: #fff8e6;
+  --yegov-primitive-warning-600: #b7791f;
+  --yegov-primitive-warning-900: #543300;
+  --yegov-primitive-error-50: #fff4f3;
+  --yegov-primitive-error-600: #c43d32;
+  --yegov-primitive-error-900: #5e1712;
+
+  /* Semantic colors: the public color contract for runtime UI. */
+  --yegov-color-bg-canvas: var(--yegov-primitive-neutral-50);
+  --yegov-color-bg-surface: var(--yegov-primitive-white);
+  --yegov-color-bg-surface-subtle: var(--yegov-primitive-neutral-100);
+  --yegov-color-bg-inverse: var(--yegov-primitive-neutral-900);
+  --yegov-color-bg-interaction-subtle: var(--yegov-primitive-civic-blue-50);
+
+  --yegov-color-text-primary: var(--yegov-primitive-neutral-900);
+  --yegov-color-text-secondary: var(--yegov-primitive-neutral-700);
+  --yegov-color-text-subtle: var(--yegov-primitive-neutral-600);
+  --yegov-color-text-disabled: var(--yegov-primitive-neutral-500);
+  --yegov-color-text-inverse: var(--yegov-primitive-white);
+  --yegov-color-text-link: var(--yegov-primitive-civic-blue-700);
+  --yegov-color-text-link-hover: var(--yegov-primitive-civic-blue-800);
+  --yegov-color-text-link-active: var(--yegov-primitive-civic-blue-900);
+
+  --yegov-color-border-default: var(--yegov-primitive-neutral-300);
+  --yegov-color-border-subtle: var(--yegov-primitive-neutral-200);
+  --yegov-color-border-strong: var(--yegov-primitive-neutral-500);
+  --yegov-color-border-focus: var(--yegov-primitive-civic-blue-500);
+
+  --yegov-color-action-primary-bg-default: var(--yegov-primitive-civic-blue-700);
+  --yegov-color-action-primary-bg-hover: var(--yegov-primitive-civic-blue-800);
+  --yegov-color-action-primary-bg-active: var(--yegov-primitive-civic-blue-900);
+  --yegov-color-action-primary-text: var(--yegov-primitive-white);
+  --yegov-color-action-secondary-bg: var(--yegov-primitive-white);
+  --yegov-color-action-secondary-bg-hover: var(--yegov-primitive-civic-blue-50);
+  --yegov-color-action-secondary-border: var(--yegov-primitive-civic-blue-700);
+  --yegov-color-action-secondary-text: var(--yegov-primitive-civic-blue-700);
+  --yegov-color-action-disabled-bg: var(--yegov-primitive-neutral-200);
+  --yegov-color-action-disabled-text: var(--yegov-primitive-neutral-500);
+
+  --yegov-color-feedback-info-bg: var(--yegov-primitive-civic-blue-50);
+  --yegov-color-feedback-info-border: var(--yegov-primitive-civic-blue-500);
+  --yegov-color-feedback-info-text: var(--yegov-primitive-civic-blue-900);
+  --yegov-color-feedback-success-bg: var(--yegov-primitive-success-50);
+  --yegov-color-feedback-success-border: var(--yegov-primitive-success-600);
+  --yegov-color-feedback-success-text: var(--yegov-primitive-success-900);
+  --yegov-color-feedback-warning-bg: var(--yegov-primitive-warning-50);
+  --yegov-color-feedback-warning-border: var(--yegov-primitive-warning-600);
+  --yegov-color-feedback-warning-text: var(--yegov-primitive-warning-900);
+  --yegov-color-feedback-error-bg: var(--yegov-primitive-error-50);
+  --yegov-color-feedback-error-border: var(--yegov-primitive-error-600);
+  --yegov-color-feedback-error-text: var(--yegov-primitive-error-900);
+
+  --yegov-color-national-accent-default: var(--yegov-primitive-national-red-700);
+  --yegov-color-national-accent-subtle: var(--yegov-primitive-national-red-50);
+  --yegov-color-national-accent-text: var(--yegov-primitive-national-red-800);
+
+  /* Spacing: the complete, compact approved scale. */
+  --yegov-space-0: 0;
+  --yegov-space-2xs: 0.125rem;
+  --yegov-space-xs: 0.25rem;
+  --yegov-space-sm: 0.5rem;
+  --yegov-space-md: 0.75rem;
+  --yegov-space-base: 1rem;
+  --yegov-space-lg: 1.25rem;
+  --yegov-space-xl: 1.5rem;
+  --yegov-space-2xl: 2rem;
+  --yegov-space-3xl: 2.5rem;
+  --yegov-space-4xl: 3rem;
+  --yegov-space-5xl: 4rem;
+  --yegov-space-6xl: 5rem;
+  --yegov-space-7xl: 6rem;
+
+  --yegov-radius-none: 0;
+  --yegov-radius-xs: 0.125rem;
+  --yegov-radius-sm: 0.25rem;
+  --yegov-radius-md: 0.5rem;
+  --yegov-radius-lg: 0.75rem;
+  --yegov-radius-full: 9999px;
+
+  --yegov-border-width-default: 1px;
+  --yegov-focus-ring-width: 3px;
+  --yegov-focus-ring-offset: 3px;
+
+  /* Breakpoint values document the contract; media queries repeat the values. */
+  --yegov-breakpoint-mobile: 320px;
+  --yegov-breakpoint-tablet: 768px;
+  --yegov-breakpoint-desktop: 1200px;
+  --yegov-breakpoint-wide: 1440px;
+  --yegov-layout-foundation-max: 75rem;
+  --yegov-layout-container-max: 72.5rem;
+  --yegov-layout-margin-mobile: 1rem;
+  --yegov-layout-margin-tablet: 2rem;
+  --yegov-layout-margin-desktop: 2.5rem;
+  --yegov-layout-gutter-mobile: 1rem;
+  --yegov-layout-gutter-tablet: 1.5rem;
+  --yegov-layout-gutter-desktop: 1.5rem;
+  --yegov-layout-columns-mobile: 4;
+  --yegov-layout-columns-tablet: 8;
+  --yegov-layout-columns-desktop: 12;
+  --yegov-touch-target-mobile: 3rem;
+  --yegov-touch-target-desktop: 2.75rem;
+  --yegov-icon-sm: 1rem;
+  --yegov-icon-md: 1.25rem;
+  --yegov-icon-lg: 1.5rem;
+
+  --yegov-font-family-arabic: "Noto Sans Arabic Variable", "Noto Sans Arabic", Tahoma, "Segoe UI", Arial, sans-serif;
+  --yegov-font-family-latin: Inter, "Segoe UI", Arial, sans-serif;
+  --yegov-font-weight-regular: 400;
+  --yegov-font-weight-medium: 500;
+  --yegov-font-weight-semibold: 600;
+  --yegov-font-weight-bold: 700;
+
+  --yegov-elevation-100: 0 1px 3px rgb(0 0 0 / 8%);
+  --yegov-elevation-200: 0 4px 12px -2px rgb(0 0 0 / 10%);
+  --yegov-elevation-300: 0 12px 32px -6px rgb(0 0 0 / 12%), 0 2px 8px rgb(0 0 0 / 6%);
+
+  --yegov-motion-duration-instant: 0ms;
+  --yegov-motion-duration-fast: 120ms;
+  --yegov-motion-duration-standard: 200ms;
+  --yegov-motion-duration-emphasized: 300ms;
+  --yegov-motion-duration-slow: 500ms;
+  --yegov-motion-duration-reduced: 0ms;
+  --yegov-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --yegov-motion-easing-decelerate: cubic-bezier(0, 0, 0, 1);
+  --yegov-motion-easing-accelerate: cubic-bezier(0.3, 0, 1, 1);
+}

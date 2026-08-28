@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { Viewport } from "next";
+import "@fontsource-variable/noto-sans-arabic/wght.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#B21F2D"
+  themeColor: "#F7F8FA"
 };
 
 export default function RootLayout({

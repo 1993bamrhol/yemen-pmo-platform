@@ -1,0 +1,136 @@
+.breadcrumb,
+.pagination {
+  min-inline-size: 0;
+}
+
+.breadcrumbList,
+.paginationList {
+  align-items: center;
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.breadcrumbList {
+  flex-wrap: wrap;
+  gap: var(--yegov-space-xs);
+}
+
+.breadcrumbItem {
+  align-items: center;
+  display: flex;
+  min-inline-size: 0;
+}
+
+.breadcrumbLink,
+.breadcrumbCurrent,
+.breadcrumbDisabled {
+  align-items: center;
+  border-radius: var(--yegov-radius-full);
+  display: inline-flex;
+  font-size: 1rem;
+  line-height: 1.75rem;
+  min-block-size: var(--yegov-touch-target-mobile);
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  padding-inline: var(--yegov-space-base);
+  text-decoration: none;
+}
+
+.breadcrumbLink {
+  color: var(--yegov-color-text-link);
+  transition:
+    background-color var(--yegov-motion-duration-fast) var(--yegov-motion-easing-standard),
+    color var(--yegov-motion-duration-fast) var(--yegov-motion-easing-standard);
+}
+
+@media (hover: hover) {
+  .breadcrumbLink:hover,
+  .pageLink:hover {
+    background: var(--yegov-color-bg-interaction-subtle);
+    color: var(--yegov-color-text-link-hover);
+  }
+}
+
+.breadcrumbLink:active,
+.pageLink:active {
+  color: var(--yegov-color-text-link-active);
+}
+
+.breadcrumbCurrent {
+  color: var(--yegov-color-text-primary);
+  font-weight: var(--yegov-font-weight-semibold);
+}
+
+.breadcrumbDisabled {
+  color: var(--yegov-color-text-disabled);
+}
+
+.separator {
+  color: var(--yegov-color-text-subtle);
+  flex: 0 0 auto;
+  padding-inline: var(--yegov-space-2xs);
+}
+
+.separatorIcon {
+  background-color: currentColor;
+  block-size: var(--yegov-icon-md);
+  display: block;
+  inline-size: var(--yegov-icon-md);
+  mask: url("/icons/yegov-arrow-left.svg") center / contain no-repeat;
+}
+
+:global([dir="ltr"]) .separatorIcon {
+  transform: scaleX(-1);
+}
+
+.paginationList {
+  flex-wrap: wrap;
+  gap: var(--yegov-space-sm);
+  justify-content: center;
+}
+
+.pageLink,
+.pageCurrent,
+.pageStatic,
+.pageDisabled {
+  align-items: center;
+  border: var(--yegov-border-width-default) solid transparent;
+  border-radius: var(--yegov-radius-full);
+  display: inline-flex;
+  font-size: 0.875rem;
+  font-weight: var(--yegov-font-weight-semibold);
+  justify-content: center;
+  line-height: 1.25rem;
+  min-block-size: var(--yegov-touch-target-mobile);
+  min-inline-size: var(--yegov-touch-target-mobile);
+  padding-inline: var(--yegov-space-sm);
+  text-align: center;
+  text-decoration: none;
+}
+
+.pageLink {
+  background: var(--yegov-color-bg-surface);
+  border-color: var(--yegov-color-border-default);
+  color: var(--yegov-color-text-link);
+  transition:
+    background-color var(--yegov-motion-duration-fast) var(--yegov-motion-easing-standard),
+    border-color var(--yegov-motion-duration-fast) var(--yegov-motion-easing-standard),
+    color var(--yegov-motion-duration-fast) var(--yegov-motion-easing-standard);
+}
+
+.pageCurrent {
+  background: var(--yegov-color-action-primary-bg-default);
+  border-color: var(--yegov-color-action-primary-bg-default);
+  color: var(--yegov-color-action-primary-text);
+}
+
+.pageStatic {
+  color: var(--yegov-color-text-secondary);
+}
+
+.pageDisabled {
+  background: var(--yegov-color-action-disabled-bg);
+  color: var(--yegov-color-action-disabled-text);
+}

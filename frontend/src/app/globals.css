@@ -1,4 +1,8 @@
+@import "../styles/tokens.css";
+@import "../styles/foundations.css";
+
 :root {
+  /* Deprecated compatibility aliases; migrate consumers by feature slice. */
   --bg: #f5f6f8;
   --surface: #ffffff;
   --surface-alt: #fff8f8;
@@ -33,21 +37,16 @@ html {
 
 body {
   margin: 0;
-  color: var(--text);
-  background:
-    radial-gradient(circle at top, rgba(178, 31, 45, 0.08), transparent 32%),
-    var(--bg);
-  font-family: Tahoma, "Segoe UI", Arial, sans-serif;
+  color: var(--yegov-color-text-primary);
+  background: var(--yegov-color-bg-canvas);
+  font-family: var(--yegov-font-family-arabic);
+  font-optical-sizing: auto;
+  font-variation-settings: "wdth" 100;
 }
 
 a {
   color: inherit;
   text-decoration: none;
-}
-
-.container {
-  width: min(1180px, calc(100% - 32px));
-  margin-inline: auto;
 }
 
 .header {
@@ -222,14 +221,6 @@ a {
 
 .mobile-menu {
   display: none;
-}
-
-a:focus-visible,
-button:focus-visible,
-summary:focus-visible,
-input:focus-visible {
-  outline: 3px solid #1a5fb4;
-  outline-offset: 3px;
 }
 
 .hero {
@@ -626,20 +617,5 @@ section[id] {
 
   .hero__actions .button {
     width: 100%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
   }
 }

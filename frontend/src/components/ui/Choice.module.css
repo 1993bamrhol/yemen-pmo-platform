@@ -1,0 +1,159 @@
+.choiceGroup {
+  display: grid;
+  gap: var(--yegov-space-xs);
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.choice {
+  align-items: center;
+  border-radius: var(--yegov-radius-md);
+  color: var(--yegov-color-text-primary);
+  cursor: pointer;
+  display: flex;
+  gap: var(--yegov-space-base);
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-block-size: var(--yegov-touch-target-mobile);
+  min-inline-size: min(15rem, 100%);
+  overflow-wrap: anywhere;
+  padding-inline: var(--yegov-space-xs);
+  position: relative;
+}
+
+.nativeControl {
+  accent-color: var(--yegov-color-action-primary-bg-default);
+  block-size: var(--yegov-icon-lg);
+  flex: 0 0 auto;
+  inline-size: var(--yegov-icon-lg);
+  margin: 0;
+}
+
+.nativeControl:focus-visible,
+.switchInput:focus-visible {
+  outline: none;
+}
+
+.choice:has(.nativeControl:focus-visible),
+.choice:has(.switchInput:focus-visible) {
+  outline: var(--yegov-focus-ring-width) solid var(--yegov-color-border-focus);
+  outline-offset: var(--yegov-focus-ring-offset);
+}
+
+@media (hover: hover) {
+  .choice:hover:not([data-disabled="true"]) {
+    background: var(--yegov-color-bg-interaction-subtle);
+  }
+}
+
+.choice[data-invalid="true"] {
+  color: var(--yegov-color-feedback-error-text);
+}
+
+.choice[data-invalid="true"] .nativeControl {
+  accent-color: var(--yegov-color-feedback-error-border);
+}
+
+.choice[data-disabled="true"] {
+  color: var(--yegov-color-text-disabled);
+  cursor: not-allowed;
+}
+
+.nativeControl:disabled {
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.label {
+  min-inline-size: 0;
+}
+
+.message {
+  color: var(--yegov-color-text-subtle);
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  overflow-wrap: anywhere;
+  padding-inline-start: calc(var(--yegov-icon-lg) + var(--yegov-space-lg));
+}
+
+.choiceGroup[data-invalid="true"] .message {
+  color: var(--yegov-color-feedback-error-text);
+}
+
+.switchInput {
+  block-size: 1px;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  inline-size: 1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+}
+
+.switchTrack {
+  background: var(--yegov-color-border-default);
+  block-size: 1.75rem;
+  border: var(--yegov-border-width-default) solid var(--yegov-color-border-strong);
+  border-radius: var(--yegov-radius-full);
+  flex: 0 0 auto;
+  inline-size: 3rem;
+  position: relative;
+  transition:
+    background-color var(--yegov-motion-duration-fast) var(--yegov-motion-easing-standard),
+    border-color var(--yegov-motion-duration-fast) var(--yegov-motion-easing-standard);
+}
+
+.switchTrack::after {
+  background: var(--yegov-color-bg-surface);
+  block-size: 1.25rem;
+  border-radius: var(--yegov-radius-full);
+  box-shadow: var(--yegov-elevation-100);
+  content: "";
+  inline-size: 1.25rem;
+  inset-block-start: 0.1875rem;
+  inset-inline-start: 0.1875rem;
+  position: absolute;
+  transition: inset-inline-start var(--yegov-motion-duration-fast) var(--yegov-motion-easing-standard);
+}
+
+.switchInput:checked + .switchTrack {
+  background: var(--yegov-color-action-primary-bg-default);
+  border-color: var(--yegov-color-action-primary-bg-default);
+}
+
+.switchInput:checked + .switchTrack::after {
+  inset-inline-start: 1.4375rem;
+}
+
+.choice[data-invalid="true"] .switchTrack {
+  background: var(--yegov-color-feedback-error-bg);
+  border-color: var(--yegov-color-feedback-error-border);
+}
+
+.choice[data-invalid="true"] .switchInput:checked + .switchTrack {
+  background: var(--yegov-color-feedback-error-border);
+}
+
+.switchInput:disabled + .switchTrack {
+  background: var(--yegov-color-action-disabled-bg);
+  border-color: var(--yegov-color-border-subtle);
+}
+
+.switchInput:disabled:checked + .switchTrack::after {
+  background: var(--yegov-color-text-disabled);
+}
+
+@media (forced-colors: active) {
+  .choice:has(.nativeControl:focus-visible),
+  .choice:has(.switchInput:focus-visible) {
+    outline-color: Highlight;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .switchTrack,
+  .switchTrack::after {
+    transition-duration: var(--yegov-motion-duration-reduced);
+  }
+}
