@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
 import { SectionHeading } from "@/components/SectionHeading";
 
 const leadershipAreas = [
@@ -33,9 +31,7 @@ const organizationChart = [
 
 export default function AboutPage() {
   return (
-    <>
-      <Header />
-      <main className="container section">
+    <div className="container section">
         <SectionHeading
           title="من نحن"
           description="رئاسة مجلس الوزراء اليمني هي الجهة التنفيذية المسؤولة عن تنسيق السياسات الحكومية، متابعة أولويات الحكومة، وتطوير البنية المؤسسية الرقمية للخدمات العامة."
@@ -82,8 +78,6 @@ export default function AboutPage() {
             التواصل مع الدولة
           </Link>
         </div>
-      </main>
-      <Footer />
-    </>
+    </div>
   );
 }

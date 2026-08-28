@@ -20,7 +20,7 @@ export default async function AnnouncementDetailPage({
   }
 
   return (
-    <main className="container section">
+    <div className="container section">
       <Link href="/" className="button button--secondary">
         العودة للرئيسية
       </Link>
@@ -29,6 +29,6 @@ export default async function AnnouncementDetailPage({
         <h1 style={{ margin: "12px 0" }}>{announcement.title}</h1>
         <p>{announcement.excerpt}</p>
       </article>
-    </main>
+    </div>
   );
 }

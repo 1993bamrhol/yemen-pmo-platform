@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
 import { SectionHeading } from "@/components/SectionHeading";
 import { api } from "@/lib/api";
 
@@ -49,9 +47,7 @@ export default function ComplaintsPage() {
   };
 
   return (
-    <>
-      <Header />
-      <main className="container section">
+    <div className="container section">
         <SectionHeading
           title="الاستفسارات والشكاوى"
           description="قناة رسمية لتلقي الاستفسارات، المقترحات، والشكاوى المتعلقة بالخدمات والقرارات والبيانات الحكومية."
@@ -169,8 +165,6 @@ export default function ComplaintsPage() {
             </form>
           </div>
         </section>
-      </main>
-      <Footer />
-    </>
+    </div>
   );
 }

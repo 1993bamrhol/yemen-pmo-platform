@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
 import { SectionHeading } from "@/components/SectionHeading";
 
 const serviceDirectory = [
@@ -38,9 +36,7 @@ const serviceDirectory = [
 
 export default function ServicesPage() {
   return (
-    <>
-      <Header />
-      <main className="container section">
+    <div className="container section">
         <SectionHeading
           title="الخدمات الإلكترونية"
           description="خدمات أساسية وموثوقة تستجيب لاحتياجات المواطنين والجهات الحكومية في إطار من الشفافية والسرعة والموثوقية."
@@ -73,8 +69,6 @@ export default function ServicesPage() {
             التواصل مع الإدارة
           </Link>
         </div>
-      </main>
-      <Footer />
-    </>
+    </div>
   );
 }

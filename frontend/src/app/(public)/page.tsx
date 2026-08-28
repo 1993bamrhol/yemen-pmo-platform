@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { SectionHeading } from "@/components/SectionHeading";
 import { api } from "@/lib/api";
@@ -102,9 +100,7 @@ export default async function HomePage({
 
   return (
     <>
-      <Header />
-      <main>
-        {!portalHomeResult.ok ? (
+      {!portalHomeResult.ok ? (
           <section className="container section">
             <div className="notice notice--warning" role="status">
               نعرض نسخة محفوظة مؤقتًا من محتوى البوابة حتى استعادة الاتصال بالخدمة.
@@ -282,8 +278,6 @@ export default async function HomePage({
             ))}
           </div>
         </section>
-      </main>
-      <Footer />
     </>
   );
 }

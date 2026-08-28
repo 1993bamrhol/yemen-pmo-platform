@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
 import { SectionHeading } from "@/components/SectionHeading";
 
 const contactChannels = [
@@ -12,9 +10,7 @@ const contactChannels = [
 
 export default function ContactPage() {
   return (
-    <>
-      <Header />
-      <main className="container section">
+    <div className="container section">
         <SectionHeading
           title="تواصل معنا"
           description="قنوات الاتصال الرسمية للبوابة، واستقبال الاستفسارات والملاحظات والاقتراحات على مستوى المؤسسة."
@@ -71,8 +67,6 @@ export default function ContactPage() {
             عرض الخدمات
           </Link>
         </div>
-      </main>
-      <Footer />
-    </>
+    </div>
   );
 }
