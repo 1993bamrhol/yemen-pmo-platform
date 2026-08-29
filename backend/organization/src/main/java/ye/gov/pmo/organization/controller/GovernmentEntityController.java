@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import ye.gov.pmo.organization.dto.EntityDirectoryResponse;
 import ye.gov.pmo.organization.dto.EntityTypeResponse;
 import ye.gov.pmo.organization.dto.EntityRelationshipRequest;
 import ye.gov.pmo.organization.dto.EntityRelationshipResponse;
@@ -44,6 +46,15 @@ public class GovernmentEntityController {
     @GetMapping("/entities")
     public List<GovernmentEntityResponse> findAll() {
         return service.findPublicEntities();
+    }
+
+    @GetMapping("/entity-directory")
+    public EntityDirectoryResponse findDirectory(
+            @RequestParam(name = "type", required = false) String type,
+            @RequestParam(name = "parentId", required = false) UUID parentId,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "20") int size) {
+        return service.findPublicDirectory(type, parentId, page, size);
     }
 
     @GetMapping("/entities/{id}")

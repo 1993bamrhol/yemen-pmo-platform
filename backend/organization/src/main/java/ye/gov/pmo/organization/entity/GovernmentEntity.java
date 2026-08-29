@@ -37,6 +37,9 @@ public class GovernmentEntity {
     @Column(name = "short_name_ar", length = 150)
     private String shortNameAr;
 
+    @Column(name = "official_name_en", length = 255)
+    private String officialNameEn;
+
     @Column(nullable = false, length = 160)
     private String slug;
 
@@ -47,8 +50,23 @@ public class GovernmentEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(columnDefinition = "TEXT")
+    private String mandate;
+
     @Column(name = "website_url", length = 500)
     private String websiteUrl;
+
+    @Column(name = "official_email", length = 320)
+    private String officialEmail;
+
+    @Column(name = "official_phone", length = 80)
+    private String officialPhone;
+
+    @Column(name = "official_address_ar", length = 1000)
+    private String officialAddressAr;
+
+    @Column(name = "official_source_reference", length = 1000)
+    private String officialSourceReference;
 
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
@@ -66,16 +84,24 @@ public class GovernmentEntity {
     }
 
     public GovernmentEntity(EntityType entityType, GovernmentEntity parent, String officialNameAr,
-                            String shortNameAr, String slug, EntityStatus status, String description,
-                            String websiteUrl, Long actorUserId) {
+                            String officialNameEn, String shortNameAr, String slug, EntityStatus status,
+                            String description, String mandate, String websiteUrl, String officialEmail,
+                            String officialPhone, String officialAddressAr, String officialSourceReference,
+                            Long actorUserId) {
         this.entityType = entityType;
         this.parent = parent;
         this.officialNameAr = officialNameAr;
+        this.officialNameEn = officialNameEn;
         this.shortNameAr = shortNameAr;
         this.slug = slug;
         this.status = status;
         this.description = description;
+        this.mandate = mandate;
         this.websiteUrl = websiteUrl;
+        this.officialEmail = officialEmail;
+        this.officialPhone = officialPhone;
+        this.officialAddressAr = officialAddressAr;
+        this.officialSourceReference = officialSourceReference;
         this.createdBy = actorUserId;
         this.updatedBy = actorUserId;
     }
@@ -92,16 +118,25 @@ public class GovernmentEntity {
         updatedAt = OffsetDateTime.now();
     }
 
-    public void update(EntityType type, GovernmentEntity parent, String officialNameAr, String shortNameAr,
-                       String slug, EntityStatus status, String description, String websiteUrl, Long actorUserId) {
+    public void update(EntityType type, GovernmentEntity parent, String officialNameAr,
+                       String officialNameEn, String shortNameAr, String slug, EntityStatus status,
+                       String description, String mandate, String websiteUrl, String officialEmail,
+                       String officialPhone, String officialAddressAr, String officialSourceReference,
+                       Long actorUserId) {
         this.entityType = type;
         this.parent = parent;
         this.officialNameAr = officialNameAr;
+        this.officialNameEn = officialNameEn;
         this.shortNameAr = shortNameAr;
         this.slug = slug;
         this.status = status;
         this.description = description;
+        this.mandate = mandate;
         this.websiteUrl = websiteUrl;
+        this.officialEmail = officialEmail;
+        this.officialPhone = officialPhone;
+        this.officialAddressAr = officialAddressAr;
+        this.officialSourceReference = officialSourceReference;
         this.updatedBy = actorUserId;
     }
 
@@ -109,11 +144,17 @@ public class GovernmentEntity {
     public EntityType getEntityType() { return entityType; }
     public GovernmentEntity getParent() { return parent; }
     public String getOfficialNameAr() { return officialNameAr; }
+    public String getOfficialNameEn() { return officialNameEn; }
     public String getShortNameAr() { return shortNameAr; }
     public String getSlug() { return slug; }
     public EntityStatus getStatus() { return status; }
     public String getDescription() { return description; }
+    public String getMandate() { return mandate; }
     public String getWebsiteUrl() { return websiteUrl; }
+    public String getOfficialEmail() { return officialEmail; }
+    public String getOfficialPhone() { return officialPhone; }
+    public String getOfficialAddressAr() { return officialAddressAr; }
+    public String getOfficialSourceReference() { return officialSourceReference; }
     public OffsetDateTime getCreatedAt() { return createdAt; }
     public OffsetDateTime getUpdatedAt() { return updatedAt; }
 }
