@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ye.gov.pmo.bootstrap.shadow.ContentShadowComparisonReport;
 import ye.gov.pmo.bootstrap.shadow.ContentShadowComparisonService;
+import ye.gov.pmo.shared.web.ApiV1;
 
 @RestController
+@ApiV1
 @RequestMapping("/api/v1/admin/content-shadow-comparison")
 public class ContentShadowComparisonController {
     private final ContentShadowComparisonService comparisonService;

@@ -20,8 +20,10 @@ import ye.gov.pmo.organization.dto.GovernmentEntityRequest;
 import ye.gov.pmo.organization.dto.GovernmentEntityResponse;
 import ye.gov.pmo.organization.service.GovernmentEntityService;
 import ye.gov.pmo.organization.service.EntityRelationshipService;
+import ye.gov.pmo.shared.web.ApiV1;
 
 @RestController
+@ApiV1
 @RequestMapping("/api/v1")
 public class GovernmentEntityController {
 

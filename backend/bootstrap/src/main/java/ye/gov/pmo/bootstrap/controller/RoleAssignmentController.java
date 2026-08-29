@@ -17,8 +17,10 @@ import ye.gov.pmo.identity.dto.RoleAssignmentRequest;
 import ye.gov.pmo.identity.dto.RoleAssignmentResponse;
 import ye.gov.pmo.identity.service.RoleAssignmentService;
 import ye.gov.pmo.organization.service.GovernmentEntityService;
+import ye.gov.pmo.shared.web.ApiV1;
 
 @RestController
+@ApiV1
 @RequestMapping("/api/v1/admin/entities/{entityId}/assignments")
 public class RoleAssignmentController {
 

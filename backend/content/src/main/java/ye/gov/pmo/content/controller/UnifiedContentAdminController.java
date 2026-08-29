@@ -22,8 +22,10 @@ import ye.gov.pmo.content.dto.ContentTransitionRequest;
 import ye.gov.pmo.content.dto.ContentTransitionResponse;
 import ye.gov.pmo.content.dto.PageResponse;
 import ye.gov.pmo.content.service.AdminContentService;
+import ye.gov.pmo.shared.web.ApiV1;
 
 @RestController
+@ApiV1
 @RequestMapping("/api/v1/admin")
 public class UnifiedContentAdminController {
     private final AdminContentService service;

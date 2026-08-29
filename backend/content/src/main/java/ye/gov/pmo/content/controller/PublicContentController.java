@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ye.gov.pmo.content.dto.PageResponse;
 import ye.gov.pmo.content.dto.PublicContentResponse;
 import ye.gov.pmo.content.service.PublicContentService;
+import ye.gov.pmo.shared.web.ApiV1;
 
 @RestController
+@ApiV1
 @RequestMapping("/api/v1")
 @ConditionalOnProperty(prefix = "features.unified-content-read", name = "enabled", havingValue = "true")
 public class PublicContentController {

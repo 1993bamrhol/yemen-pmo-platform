@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ye.gov.pmo.bootstrap.backfill.BackfillApplyRequest;
 import ye.gov.pmo.bootstrap.backfill.BackfillApplyResponse;
 import ye.gov.pmo.bootstrap.backfill.ContentBackfillApplyService;
+import ye.gov.pmo.shared.web.ApiV1;
 
 @RestController
+@ApiV1
 @RequestMapping("/api/v1/admin/content-backfill")
 @ConditionalOnProperty(name = "features.unified-content-backfill-apply.enabled", havingValue = "true")
 public class ContentBackfillApplyController {
