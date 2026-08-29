@@ -31,7 +31,7 @@ public class UnifiedLegacyProjectionService {
     public List<ProjectedLegacyContent> findAll(String contentType, String sourceSystem) {
         Map<UUID, Snapshot> snapshotsByContentId = snapshots(contentType, sourceSystem).stream()
                 .collect(Collectors.toMap(this::mappedId, Function.identity()));
-        return publicContent.findPublished(contentType, null, null, null, null, 0, 100).items().stream()
+        return publicContent.findPublishedForCompatibility(contentType, 0, 100).items().stream()
                 .map(item -> project(item, requiredSnapshot(snapshotsByContentId, item.id())))
                 .toList();
     }
@@ -41,7 +41,7 @@ public class UnifiedLegacyProjectionService {
                 .filter(item -> item.legacyId() == legacyId)
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("Legacy source mapping is missing"));
-        return project(publicContent.findById(mappedId(snapshot)), snapshot);
+        return project(publicContent.findByIdForCompatibility(mappedId(snapshot)), snapshot);
     }
 
     private List<Snapshot> snapshots(String contentType, String sourceSystem) {

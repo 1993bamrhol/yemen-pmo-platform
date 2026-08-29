@@ -13,9 +13,13 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import java.time.OffsetDateTime;
+import java.util.Objects;
 import java.util.UUID;
 import ye.gov.pmo.content.domain.ContentStatus;
 import ye.gov.pmo.content.domain.ContentType;
+import ye.gov.pmo.content.domain.EditorialSourceType;
+import ye.gov.pmo.content.domain.EditorialVerificationStatus;
+import ye.gov.pmo.content.domain.InvalidEditorialVerificationException;
 import ye.gov.pmo.organization.entity.GovernmentEntity;
 
 @Entity(name = "UnifiedContentItem")
@@ -63,6 +67,27 @@ public class ContentItem {
     @Column(name = "archived_at")
     private OffsetDateTime archivedAt;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "editorial_verification_status", nullable = false, length = 20)
+    private EditorialVerificationStatus editorialVerificationStatus;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "editorial_verified_revision_id")
+    private ContentRevision editorialVerifiedRevision;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "provenance_source_type", length = 40)
+    private EditorialSourceType provenanceSourceType;
+
+    @Column(name = "provenance_source_reference", length = 1000)
+    private String provenanceSourceReference;
+
+    @Column(name = "editorial_verified_at")
+    private OffsetDateTime editorialVerifiedAt;
+
+    @Column(name = "editorial_verified_by")
+    private Long editorialVerifiedBy;
+
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
 
@@ -90,6 +115,7 @@ public class ContentItem {
         this.slug = slug;
         this.locale = locale;
         this.status = ContentStatus.DRAFT;
+        this.editorialVerificationStatus = EditorialVerificationStatus.UNVERIFIED;
         this.createdBy = actorUserId;
         this.updatedBy = actorUserId;
     }
@@ -98,6 +124,9 @@ public class ContentItem {
     void onCreate() {
         OffsetDateTime now = OffsetDateTime.now();
         if (createdAt == null) createdAt = now;
+        if (editorialVerificationStatus == null) {
+            editorialVerificationStatus = EditorialVerificationStatus.UNVERIFIED;
+        }
         updatedAt = now;
     }
 
@@ -116,12 +145,62 @@ public class ContentItem {
         this.updatedBy = actorUserId;
         if (target == ContentStatus.PUBLISHED) {
             this.publishedRevision = currentRevision;
+            clearEditorialVerification(EditorialVerificationStatus.UNVERIFIED);
             if (firstPublishedAt == null) firstPublishedAt = occurredAt;
             lastPublishedAt = occurredAt;
             archivedAt = null;
         } else if (target == ContentStatus.ARCHIVED) {
             archivedAt = occurredAt;
         }
+    }
+
+    public void updateEditorialVerification(
+            EditorialVerificationStatus verificationStatus,
+            EditorialSourceType sourceType,
+            String sourceReference,
+            Long actorUserId,
+            OffsetDateTime occurredAt) {
+        Objects.requireNonNull(verificationStatus, "verificationStatus must not be null");
+        if (verificationStatus == EditorialVerificationStatus.UNVERIFIED) {
+            clearEditorialVerification(EditorialVerificationStatus.UNVERIFIED);
+            this.updatedBy = actorUserId;
+            return;
+        }
+        if (status != ContentStatus.PUBLISHED || publishedRevision == null) {
+            throw new InvalidEditorialVerificationException(
+                    "Only published content can receive an editorial verification decision");
+        }
+        if (verificationStatus == EditorialVerificationStatus.REJECTED) {
+            clearEditorialVerification(EditorialVerificationStatus.REJECTED);
+            this.updatedBy = actorUserId;
+            return;
+        }
+        if (sourceType == null || sourceReference == null || sourceReference.isBlank()) {
+            throw new IllegalArgumentException("Verified content requires provenance");
+        }
+        this.editorialVerificationStatus = EditorialVerificationStatus.VERIFIED;
+        this.editorialVerifiedRevision = publishedRevision;
+        this.provenanceSourceType = sourceType;
+        this.provenanceSourceReference = sourceReference.trim();
+        this.editorialVerifiedAt = occurredAt;
+        this.editorialVerifiedBy = actorUserId;
+        this.updatedBy = actorUserId;
+    }
+
+    public boolean isEditoriallyVerified() {
+        return editorialVerificationStatus == EditorialVerificationStatus.VERIFIED
+                && publishedRevision != null
+                && editorialVerifiedRevision != null
+                && editorialVerifiedRevision.getId().equals(publishedRevision.getId());
+    }
+
+    private void clearEditorialVerification(EditorialVerificationStatus targetStatus) {
+        this.editorialVerificationStatus = targetStatus;
+        this.editorialVerifiedRevision = null;
+        this.provenanceSourceType = null;
+        this.provenanceSourceReference = null;
+        this.editorialVerifiedAt = null;
+        this.editorialVerifiedBy = null;
     }
 
     public UUID getId() { return id; }
@@ -135,6 +214,12 @@ public class ContentItem {
     public OffsetDateTime getFirstPublishedAt() { return firstPublishedAt; }
     public OffsetDateTime getLastPublishedAt() { return lastPublishedAt; }
     public OffsetDateTime getArchivedAt() { return archivedAt; }
+    public EditorialVerificationStatus getEditorialVerificationStatus() { return editorialVerificationStatus; }
+    public ContentRevision getEditorialVerifiedRevision() { return editorialVerifiedRevision; }
+    public EditorialSourceType getProvenanceSourceType() { return provenanceSourceType; }
+    public String getProvenanceSourceReference() { return provenanceSourceReference; }
+    public OffsetDateTime getEditorialVerifiedAt() { return editorialVerifiedAt; }
+    public Long getEditorialVerifiedBy() { return editorialVerifiedBy; }
     public OffsetDateTime getCreatedAt() { return createdAt; }
     public OffsetDateTime getUpdatedAt() { return updatedAt; }
     public Long getCreatedBy() { return createdBy; }

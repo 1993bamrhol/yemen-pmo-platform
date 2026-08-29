@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import ye.gov.pmo.content.dto.ContentCreateRequest;
 import ye.gov.pmo.content.dto.ContentRevisionRequest;
 import ye.gov.pmo.content.dto.ContentTransitionRequest;
 import ye.gov.pmo.content.dto.ContentTransitionResponse;
+import ye.gov.pmo.content.dto.EditorialVerificationRequest;
 import ye.gov.pmo.content.dto.PageResponse;
 import ye.gov.pmo.content.service.AdminContentService;
 import ye.gov.pmo.shared.web.ApiV1;
@@ -72,5 +74,13 @@ public class UnifiedContentAdminController {
             @Valid @RequestBody ContentTransitionRequest request,
             @RequestHeader(name = "X-Correlation-ID", required = false) String correlationId) {
         return service.transition(contentId, request, correlationId);
+    }
+
+    @PutMapping("/content/{contentId}/editorial-verification")
+    public AdminContentResponse updateEditorialVerification(
+            @PathVariable("contentId") UUID contentId,
+            @Valid @RequestBody EditorialVerificationRequest request,
+            @RequestHeader(name = "X-Correlation-ID", required = false) String correlationId) {
+        return service.updateEditorialVerification(contentId, request, correlationId);
     }
 }

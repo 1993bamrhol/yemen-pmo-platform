@@ -47,6 +47,17 @@ public class PublicContentService {
     public PageResponse<PublicContentResponse> findPublished(
             String type, UUID entityId, String category, LocalDate dateFrom, LocalDate dateTo,
             int page, int size) {
+        return findPublished(type, entityId, category, dateFrom, dateTo, page, size, true);
+    }
+
+    public PageResponse<PublicContentResponse> findPublishedForCompatibility(
+            String type, int page, int size) {
+        return findPublished(type, null, null, null, null, page, size, false);
+    }
+
+    private PageResponse<PublicContentResponse> findPublished(
+            String type, UUID entityId, String category, LocalDate dateFrom, LocalDate dateTo,
+            int page, int size, boolean requireEditorialVerification) {
         validatePage(page, size);
         if (dateFrom != null && dateTo != null && dateTo.isBefore(dateFrom)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "dateTo must not be before dateFrom");
@@ -58,7 +69,8 @@ public class PublicContentService {
                 ? null
                 : dateTo.plusDays(1).atStartOfDay().atOffset(ZoneOffset.UTC);
         Page<ContentItem> result = contentRepository.findAll(
-                publishedSpecification(contentType, entityId, categorySlug, from, toExclusive),
+                publishedSpecification(contentType, entityId, categorySlug, from, toExclusive,
+                        requireEditorialVerification),
                 PageRequest.of(page, size, org.springframework.data.domain.Sort.by(
                         org.springframework.data.domain.Sort.Order.desc("lastPublishedAt"),
                         org.springframework.data.domain.Sort.Order.desc("id"))));
@@ -71,6 +83,12 @@ public class PublicContentService {
 
     public PublicContentResponse findById(UUID id) {
         ContentItem item = contentRepository.findPublicById(id)
+                .orElseThrow(() -> notFound());
+        return toResponse(item, categoriesFor(List.of(item)).getOrDefault(id, List.of()));
+    }
+
+    public PublicContentResponse findByIdForCompatibility(UUID id) {
+        ContentItem item = contentRepository.findPublishedByIdForCompatibility(id)
                 .orElseThrow(() -> notFound());
         return toResponse(item, categoriesFor(List.of(item)).getOrDefault(id, List.of()));
     }
@@ -97,11 +115,18 @@ public class PublicContentService {
 
     private Specification<ContentItem> publishedSpecification(
             ContentType contentType, UUID entityId, String categorySlug,
-            OffsetDateTime publishedFrom, OffsetDateTime publishedToExclusive) {
+            OffsetDateTime publishedFrom, OffsetDateTime publishedToExclusive,
+            boolean requireEditorialVerification) {
         return (root, query, criteria) -> {
             List<jakarta.persistence.criteria.Predicate> predicates = new ArrayList<>();
             predicates.add(criteria.isNotNull(root.get("publishedRevision")));
             predicates.add(criteria.isNull(root.get("archivedAt")));
+            if (requireEditorialVerification) {
+                predicates.add(criteria.equal(root.get("editorialVerificationStatus"),
+                        ye.gov.pmo.content.domain.EditorialVerificationStatus.VERIFIED));
+                predicates.add(criteria.equal(
+                        root.get("editorialVerifiedRevision"), root.get("publishedRevision")));
+            }
             if (contentType != null) {
                 predicates.add(criteria.equal(root.get("contentType"), contentType));
             }

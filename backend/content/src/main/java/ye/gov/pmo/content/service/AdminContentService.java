@@ -15,12 +15,15 @@ import ye.gov.pmo.content.domain.ContentSeparationOfDutiesException;
 import ye.gov.pmo.content.domain.ContentStatus;
 import ye.gov.pmo.content.domain.ContentType;
 import ye.gov.pmo.content.domain.ContentWorkflowPolicy;
+import ye.gov.pmo.content.domain.EditorialVerificationStatus;
+import ye.gov.pmo.content.domain.InvalidEditorialVerificationException;
 import ye.gov.pmo.content.domain.InvalidContentTransitionException;
 import ye.gov.pmo.content.dto.AdminContentResponse;
 import ye.gov.pmo.content.dto.ContentCreateRequest;
 import ye.gov.pmo.content.dto.ContentRevisionRequest;
 import ye.gov.pmo.content.dto.ContentTransitionRequest;
 import ye.gov.pmo.content.dto.ContentTransitionResponse;
+import ye.gov.pmo.content.dto.EditorialVerificationRequest;
 import ye.gov.pmo.content.dto.PageResponse;
 import ye.gov.pmo.content.entity.ContentItem;
 import ye.gov.pmo.content.entity.ContentRevision;
@@ -156,6 +159,34 @@ public class AdminContentService {
         }
     }
 
+    @Transactional
+    public AdminContentResponse updateEditorialVerification(
+            UUID id, EditorialVerificationRequest request, String correlationId) {
+        ContentItem item = items.findForAdministrationById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Content item not found"));
+        UUID entityId = item.getPrimaryEntity().getId();
+        if (!authorization.hasPermission(entityId, "content.publish", "content.manage")) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "Editorial verification authority is required");
+        }
+        validateProvenance(request);
+        Long actorId = requiredActor();
+        OffsetDateTime now = OffsetDateTime.now();
+        try {
+            item.updateEditorialVerification(
+                    request.status(), request.sourceType(), request.sourceReference(), actorId, now);
+            ContentItem saved = items.save(item);
+            auditService.record(actorId, auditAction(request.status()), "ContentItem", id.toString(),
+                    entityId, AuditOutcome.SUCCESS, correlationId, verificationMetadata(saved));
+            return toResponse(saved);
+        } catch (InvalidEditorialVerificationException exception) {
+            auditService.recordIndependent(actorId, auditAction(request.status()), "ContentItem", id.toString(),
+                    entityId, AuditOutcome.FAILURE, correlationId,
+                    "status=" + request.status() + ";publicationStatus=" + item.getStatus());
+            throw exception;
+        }
+    }
+
     private ContentItem loadAuthorized(UUID id, String... permissions) {
         ContentItem item = items.findForAdministrationById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Content item not found"));
@@ -193,6 +224,45 @@ public class AdminContentService {
         return true;
     }
 
+    private void validateProvenance(EditorialVerificationRequest request) {
+        boolean hasSourceType = request.sourceType() != null;
+        boolean hasSourceReference = request.sourceReference() != null
+                && !request.sourceReference().isBlank();
+        if (request.status() == EditorialVerificationStatus.VERIFIED) {
+            if (!hasSourceType || !hasSourceReference) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "Verified content requires sourceType and sourceReference");
+            }
+            return;
+        }
+        if (hasSourceType || hasSourceReference) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Provenance is only accepted for VERIFIED content");
+        }
+    }
+
+    private String auditAction(EditorialVerificationStatus status) {
+        return switch (status) {
+            case VERIFIED -> "CONTENT_EDITORIAL_VERIFIED";
+            case REJECTED -> "CONTENT_EDITORIAL_REJECTED";
+            case UNVERIFIED -> "CONTENT_EDITORIAL_VERIFICATION_RESET";
+        };
+    }
+
+    private String verificationMetadata(ContentItem item) {
+        String revisionId = item.getEditorialVerifiedRevision() == null
+                ? "none"
+                : item.getEditorialVerifiedRevision().getId().toString();
+        String sourceType = item.getProvenanceSourceType() == null
+                ? "none"
+                : item.getProvenanceSourceType().name();
+        return "status=" + item.getEditorialVerificationStatus()
+                + ";verifiedRevisionId=" + revisionId
+                + ";sourceType=" + sourceType;
+    }
+
     private void applyCategories(ContentItem item, Set<String> requestedSlugs, Long actorId) {
         if (requestedSlugs == null || requestedSlugs.isEmpty()) return;
         Set<String> slugs = new LinkedHashSet<>(requestedSlugs);
@@ -228,7 +298,21 @@ public class AdminContentService {
         return new AdminContentResponse(item.getId(), item.getContentType(), item.getPrimaryEntity().getId(),
                 item.getSlug(), item.getLocale(), item.getStatus(), revision(item.getCurrentRevision()),
                 revision(item.getPublishedRevision()), item.getFirstPublishedAt(), item.getLastPublishedAt(),
-                item.getArchivedAt(), item.getCreatedAt(), item.getUpdatedAt(), item.getVersion());
+                item.getArchivedAt(), editorialVerification(item), item.getCreatedAt(), item.getUpdatedAt(),
+                item.getVersion());
+    }
+
+    private AdminContentResponse.EditorialVerification editorialVerification(ContentItem item) {
+        UUID verifiedRevisionId = item.getEditorialVerifiedRevision() == null
+                ? null
+                : item.getEditorialVerifiedRevision().getId();
+        return new AdminContentResponse.EditorialVerification(
+                item.getEditorialVerificationStatus(),
+                verifiedRevisionId,
+                item.getProvenanceSourceType(),
+                item.getProvenanceSourceReference(),
+                item.getEditorialVerifiedAt(),
+                item.getEditorialVerifiedBy());
     }
 
     private AdminContentResponse.Revision revision(ContentRevision revision) {

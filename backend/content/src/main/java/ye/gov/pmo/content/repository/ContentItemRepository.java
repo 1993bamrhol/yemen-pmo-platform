@@ -17,7 +17,8 @@ public interface ContentItemRepository extends JpaRepository<ContentItem, UUID>,
 
     boolean existsByContentTypeAndLocaleAndSlug(ContentType contentType, String locale, String slug);
 
-    @EntityGraph(attributePaths = {"currentRevision", "publishedRevision", "primaryEntity", "primaryEntity.entityType"})
+    @EntityGraph(attributePaths = {"currentRevision", "publishedRevision", "editorialVerifiedRevision",
+            "primaryEntity", "primaryEntity.entityType"})
     @Query("""
             select item from UnifiedContentItem item
             where item.primaryEntity.id = :entityId
@@ -31,27 +32,44 @@ public interface ContentItemRepository extends JpaRepository<ContentItem, UUID>,
             @Param("contentType") ContentType contentType,
             Pageable pageable);
 
-    @EntityGraph(attributePaths = {"currentRevision", "publishedRevision", "primaryEntity", "primaryEntity.entityType"})
+    @EntityGraph(attributePaths = {"currentRevision", "publishedRevision", "editorialVerifiedRevision",
+            "primaryEntity", "primaryEntity.entityType"})
     @Query("select item from UnifiedContentItem item where item.id = :id")
     Optional<ContentItem> findForAdministrationById(@Param("id") UUID id);
 
     @Override
-    @EntityGraph(attributePaths = {"publishedRevision", "primaryEntity", "primaryEntity.entityType"})
+    @EntityGraph(attributePaths = {"publishedRevision", "editorialVerifiedRevision",
+            "primaryEntity", "primaryEntity.entityType"})
     Page<ContentItem> findAll(org.springframework.data.jpa.domain.Specification<ContentItem> specification,
                               Pageable pageable);
 
-    @EntityGraph(attributePaths = {"publishedRevision", "primaryEntity", "primaryEntity.entityType"})
+    @EntityGraph(attributePaths = {"publishedRevision", "editorialVerifiedRevision",
+            "primaryEntity", "primaryEntity.entityType"})
     @Query("""
             select item from UnifiedContentItem item
-            where item.id = :id and item.publishedRevision is not null and item.archivedAt is null
+            where item.id = :id
+              and item.publishedRevision is not null
+              and item.archivedAt is null
+              and item.editorialVerificationStatus = 'VERIFIED'
+              and item.editorialVerifiedRevision = item.publishedRevision
             """)
     Optional<ContentItem> findPublicById(@Param("id") UUID id);
 
     @EntityGraph(attributePaths = {"publishedRevision", "primaryEntity", "primaryEntity.entityType"})
     @Query("""
             select item from UnifiedContentItem item
+            where item.id = :id and item.publishedRevision is not null and item.archivedAt is null
+            """)
+    Optional<ContentItem> findPublishedByIdForCompatibility(@Param("id") UUID id);
+
+    @EntityGraph(attributePaths = {"publishedRevision", "editorialVerifiedRevision",
+            "primaryEntity", "primaryEntity.entityType"})
+    @Query("""
+            select item from UnifiedContentItem item
             where item.contentType = :contentType and item.locale = :locale and item.slug = :slug
               and item.publishedRevision is not null and item.archivedAt is null
+              and item.editorialVerificationStatus = 'VERIFIED'
+              and item.editorialVerifiedRevision = item.publishedRevision
             """)
     Optional<ContentItem> findPublicBySlug(
             @Param("contentType") ContentType contentType,

@@ -75,8 +75,8 @@ public class ContentShadowComparisonService {
                 .filter(source -> source.sourceSystem().equals(definition.sourceSystem()))
                 .sorted(java.util.Comparator.comparingLong(Snapshot::legacyId))
                 .toList();
-        List<PublicContentResponse> unified = publicContent.findPublished(
-                definition.contentType(), null, null, null, null, 0, 100).items();
+        List<PublicContentResponse> unified = publicContent.findPublishedForCompatibility(
+                definition.contentType(), 0, 100).items();
         Map<UUID, PublicContentResponse> unifiedById = unified.stream()
                 .collect(Collectors.toMap(PublicContentResponse::id, Function.identity()));
 

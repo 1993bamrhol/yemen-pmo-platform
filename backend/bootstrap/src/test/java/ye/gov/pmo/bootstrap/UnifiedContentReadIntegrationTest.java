@@ -50,10 +50,17 @@ class UnifiedContentReadIntegrationTest {
         jdbcTemplate.update("""
                 update content_items
                 set status = 'PUBLISHED', current_revision_id = ?, published_revision_id = ?,
-                    first_published_at = ?, last_published_at = ?, updated_at = ?
+                    first_published_at = ?, last_published_at = ?, updated_at = ?,
+                    editorial_verification_status = 'VERIFIED',
+                    editorial_verified_revision_id = ?,
+                    provenance_source_type = 'OFFICIAL_MANUAL_ENTRY',
+                    provenance_source_reference = 'test:unified-public-news',
+                    editorial_verified_at = ?,
+                    editorial_verified_by = (select id from users where username = 'admin')
                 where id = ?
                 """, PUBLISHED_REVISION_ID, PUBLISHED_REVISION_ID,
-                publishedAt, publishedAt, publishedAt, PUBLISHED_ID);
+                publishedAt, publishedAt, publishedAt, PUBLISHED_REVISION_ID,
+                publishedAt, PUBLISHED_ID);
         jdbcTemplate.update("""
                 insert into taxonomy_terms (
                     id, taxonomy_code, slug, label_ar, active, created_at

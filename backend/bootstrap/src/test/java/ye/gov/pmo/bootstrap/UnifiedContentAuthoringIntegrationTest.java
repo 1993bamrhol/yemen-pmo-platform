@@ -3,6 +3,7 @@ package ye.gov.pmo.bootstrap;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -63,7 +64,11 @@ class UnifiedContentAuthoringIntegrationTest {
                 EDITOR_ID, PUBLISHER_ID, OUTSIDER_ID, HEALTH_ID);
         jdbc.update("delete from audit_events where action like 'CONTENT_%'");
         jdbc.update("""
-                update content_items set status = 'DRAFT', current_revision_id = null, published_revision_id = null
+                update content_items set status = 'DRAFT', current_revision_id = null,
+                    published_revision_id = null, editorial_verification_status = 'UNVERIFIED',
+                    editorial_verified_revision_id = null, provenance_source_type = null,
+                    provenance_source_reference = null, editorial_verified_at = null,
+                    editorial_verified_by = null
                 where slug in ('slice-three-authoring', 'break-glass-authoring-test')
                 """);
         jdbc.update("""
@@ -139,6 +144,11 @@ class UnifiedContentAuthoringIntegrationTest {
         transition("content-publisher-test", "PUBLISH", false, "اعتماد النشر", status().isOk());
 
         mockMvc.perform(get("/api/v1/content/{id}", contentId))
+                .andExpect(status().isNotFound());
+
+        verify("content-publisher-test", "OFFICIAL_MANUAL_ENTRY", "test:slice-three-authoring");
+
+        mockMvc.perform(get("/api/v1/content/{id}", contentId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("خبر منقح"));
 
@@ -161,6 +171,9 @@ class UnifiedContentAuthoringIntegrationTest {
                 .andExpect(jsonPath("$.title").value("خبر منقح"));
         transition("content-publisher-test", "APPROVE", false, "اعتماد التحديث", status().isOk());
         transition("content-publisher-test", "PUBLISH", false, "نشر التحديث", status().isOk());
+        mockMvc.perform(get("/api/v1/content/{id}", contentId))
+                .andExpect(status().isNotFound());
+        verify("content-publisher-test", "OFFICIAL_MANUAL_ENTRY", "test:slice-three-authoring:v3");
         mockMvc.perform(get("/api/v1/content/{id}", contentId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("خبر محدث بعد النشر"));
@@ -217,6 +230,20 @@ class UnifiedContentAuthoringIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new TransitionPayload(action, comment, breakGlass))))
                 .andExpect(expected);
+    }
+
+    private void verify(String username, String sourceType, String sourceReference) throws Exception {
+        mockMvc.perform(put("/api/v1/admin/content/{id}/editorial-verification", contentId)
+                        .with(user(username))
+                        .header("X-Correlation-ID", "slice-5c2-test")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"status":"VERIFIED","sourceType":"%s","sourceReference":"%s"}
+                                """.formatted(sourceType, sourceReference)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.editorialVerification.status").value("VERIFIED"))
+                .andExpect(jsonPath("$.editorialVerification.sourceType").value(sourceType))
+                .andExpect(jsonPath("$.editorialVerification.sourceReference").value(sourceReference));
     }
 
     private void insertUser(long id, String username, String email) {
