@@ -1,0 +1,388 @@
+.page {
+  background: var(--yegov-color-bg-surface);
+  color: var(--yegov-color-text-primary);
+  min-inline-size: 0;
+}
+
+.hero {
+  background: var(--yegov-color-bg-surface);
+  border-block-end: var(--yegov-border-width-default) solid
+    var(--yegov-color-border-subtle);
+  overflow: hidden;
+}
+
+.heroContainer {
+  display: grid;
+  gap: var(--yegov-space-xl);
+  padding-block: var(--yegov-space-xl) var(--yegov-space-4xl);
+  position: relative;
+}
+
+.heroGrid {
+  display: grid;
+  gap: var(--yegov-space-2xl);
+  min-inline-size: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.heroCopy {
+  align-content: start;
+  display: grid;
+  gap: var(--yegov-space-md);
+  min-inline-size: 0;
+}
+
+.heroCopy > :first-child {
+  inline-size: max-content;
+  max-inline-size: 100%;
+}
+
+.heroTitle,
+.ownerLabel,
+.ownerName,
+.summary,
+.actionEyebrow,
+.actionTitle,
+.actionDescription,
+.description,
+.detailPanel h3,
+.detailList p,
+.steps h3,
+.steps p,
+.channels h3,
+.channels p,
+.stateTitle {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.heroTitle {
+  font-size: clamp(2rem, 1.55rem + 2vw, 3rem);
+  font-weight: var(--yegov-font-weight-bold);
+  line-height: 1.35;
+  max-inline-size: 48rem;
+}
+
+.ownerLabel,
+.actionEyebrow {
+  color: var(--yegov-color-text-subtle);
+  font-size: 0.875rem;
+  font-weight: var(--yegov-font-weight-semibold);
+  line-height: 1.5rem;
+}
+
+.ownerName {
+  color: var(--yegov-color-text-primary);
+  font-size: 1rem;
+  font-weight: var(--yegov-font-weight-semibold);
+  line-height: 1.75rem;
+}
+
+.summary,
+.description {
+  color: var(--yegov-color-text-secondary);
+  font-size: 1rem;
+  line-height: 1.9;
+  max-inline-size: 48rem;
+}
+
+.actionCard,
+.detailPanel,
+.sourcePanel {
+  background: var(--yegov-color-bg-surface-subtle);
+  border: var(--yegov-border-width-default) solid var(--yegov-color-border-default);
+  border-radius: var(--yegov-radius-lg);
+  min-inline-size: 0;
+}
+
+.actionCard {
+  align-content: start;
+  display: grid;
+  gap: var(--yegov-space-base);
+  padding: var(--yegov-space-xl);
+}
+
+.actionTitle {
+  font-size: 1.25rem;
+  font-weight: var(--yegov-font-weight-semibold);
+  line-height: 2rem;
+}
+
+.actionDescription {
+  color: var(--yegov-color-text-secondary);
+  line-height: 1.75rem;
+}
+
+.actionCard > :last-child:is(a) {
+  justify-self: start;
+}
+
+.heroMotif {
+  background: url("/icons/yegov-footer-arch-mobile.svg") center / contain
+    no-repeat;
+  block-size: 3.375rem;
+  inline-size: 6rem;
+  inset-block-end: var(--yegov-space-base);
+  inset-inline-start: 0;
+  opacity: 0.8;
+  pointer-events: none;
+  position: absolute;
+}
+
+.facts,
+.sourceDetails {
+  display: grid;
+  gap: var(--yegov-layout-gutter-mobile);
+  margin: 0;
+  min-inline-size: 0;
+}
+
+.fact {
+  background: var(--yegov-color-bg-surface);
+  border: var(--yegov-border-width-default) solid var(--yegov-color-border-default);
+  border-radius: var(--yegov-radius-lg);
+  display: grid;
+  gap: var(--yegov-space-base);
+  min-inline-size: 0;
+  padding: var(--yegov-space-xl);
+}
+
+.fact dt,
+.sourceDetails dt {
+  color: var(--yegov-color-text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+}
+
+.fact dd,
+.sourceDetails dd {
+  color: var(--yegov-color-text-primary);
+  font-size: 1.125rem;
+  font-weight: var(--yegov-font-weight-semibold);
+  line-height: 2rem;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.requirementsGrid {
+  display: grid;
+  gap: var(--yegov-layout-gutter-mobile);
+  min-inline-size: 0;
+}
+
+.detailPanel {
+  padding: var(--yegov-space-xl);
+}
+
+.detailPanel h3,
+.steps h3,
+.channels h3 {
+  font-size: 1.25rem;
+  font-weight: var(--yegov-font-weight-semibold);
+  line-height: 2rem;
+}
+
+.detailList {
+  display: grid;
+  gap: var(--yegov-space-base);
+  margin: var(--yegov-space-base) 0 0;
+  padding-inline-start: var(--yegov-space-xl);
+}
+
+.detailList li {
+  min-inline-size: 0;
+  padding-inline-start: var(--yegov-space-xs);
+}
+
+.detailList strong {
+  overflow-wrap: anywhere;
+}
+
+.detailList p,
+.steps p,
+.channels p {
+  color: var(--yegov-color-text-secondary);
+  line-height: 1.75rem;
+  margin-block-start: var(--yegov-space-xs);
+}
+
+.steps,
+.channels {
+  display: grid;
+  gap: var(--yegov-space-base);
+  margin: 0;
+  min-inline-size: 0;
+}
+
+.steps {
+  list-style-position: outside;
+  padding-inline-start: var(--yegov-space-2xl);
+}
+
+.steps > li {
+  color: var(--yegov-color-text-link);
+  font-size: 1.25rem;
+  font-weight: var(--yegov-font-weight-bold);
+  padding-inline-start: var(--yegov-space-sm);
+}
+
+.steps > li > div {
+  background: var(--yegov-color-bg-surface);
+  border: var(--yegov-border-width-default) solid var(--yegov-color-border-default);
+  border-radius: var(--yegov-radius-md);
+  color: var(--yegov-color-text-primary);
+  font-size: 1rem;
+  font-weight: var(--yegov-font-weight-regular);
+  min-inline-size: 0;
+  padding: var(--yegov-space-base);
+}
+
+.channels {
+  list-style: none;
+  padding: 0;
+}
+
+.channels > li {
+  align-content: start;
+  background: var(--yegov-color-bg-surface);
+  border: var(--yegov-border-width-default) solid var(--yegov-color-border-default);
+  border-radius: var(--yegov-radius-lg);
+  display: grid;
+  gap: var(--yegov-space-base);
+  min-inline-size: 0;
+  padding: var(--yegov-space-xl);
+}
+
+.channels > li > :first-child {
+  inline-size: max-content;
+  max-inline-size: 100%;
+}
+
+.channels > li > :last-child:is(a) {
+  justify-self: start;
+  margin-block-start: auto;
+}
+
+.sourcePanel {
+  display: grid;
+  gap: var(--yegov-space-xl);
+  padding: var(--yegov-space-xl);
+}
+
+.sourceDetails > div {
+  display: grid;
+  gap: var(--yegov-space-sm);
+  min-inline-size: 0;
+}
+
+.sourceDetails dd {
+  font-size: 1rem;
+  line-height: 1.75rem;
+}
+
+.stateTitle {
+  font-size: clamp(1.75rem, 1.5rem + 1vw, 2.5rem);
+  line-height: 1.4;
+  margin-block-end: var(--yegov-space-xl);
+}
+
+.loadingState {
+  min-block-size: 24rem;
+}
+
+.visuallyHidden {
+  block-size: 1px;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  inline-size: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .heroContainer {
+    padding-block: var(--yegov-space-2xl) var(--yegov-space-5xl);
+  }
+
+  .heroGrid {
+    gap: var(--yegov-layout-gutter-tablet);
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.45fr);
+  }
+
+  .heroGrid[data-has-action="false"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .heroGrid[data-has-action="false"] .heroCopy {
+    max-inline-size: 52rem;
+  }
+
+  .heroMotif {
+    background-image: url("/icons/yegov-footer-arch-desktop.svg");
+    block-size: 7.5rem;
+    inline-size: 13.5rem;
+    inset-block-end: var(--yegov-space-xl);
+  }
+
+  .facts,
+  .requirementsGrid,
+  .channels,
+  .sourceDetails {
+    gap: var(--yegov-layout-gutter-tablet);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .heroContainer {
+    padding-block-end: var(--yegov-space-4xl);
+  }
+
+  .heroGrid {
+    gap: var(--yegov-layout-gutter-desktop);
+    grid-template-columns: minmax(0, 1.6fr) minmax(17rem, 0.4fr);
+  }
+
+  .facts {
+    gap: var(--yegov-layout-gutter-desktop);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .channels {
+    gap: var(--yegov-layout-gutter-desktop);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 359px) {
+  .actionCard,
+  .detailPanel,
+  .fact,
+  .channels > li,
+  .sourcePanel {
+    padding: var(--yegov-space-base);
+  }
+
+  .steps {
+    padding-inline-start: var(--yegov-space-xl);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page {
+    scroll-behavior: auto;
+  }
+}
+
+@media (forced-colors: active) {
+  .actionCard,
+  .detailPanel,
+  .fact,
+  .steps > li > div,
+  .channels > li,
+  .sourcePanel {
+    border-color: CanvasText;
+  }
+}

@@ -131,6 +131,56 @@ export type GovernmentEntityItem = {
   websiteUrl?: string | null;
 };
 
+export type GovernmentServiceDetailItem = {
+  description?: string | null;
+  order: number;
+  title: string;
+};
+
+export type GovernmentServiceChannel = {
+  actionUrl?: string | null;
+  instructions?: string | null;
+  label?: string | null;
+  order: number;
+  type: "ONLINE" | "IN_PERSON" | "PHONE";
+};
+
+export type GovernmentServiceOwner = {
+  canonicalPath: string;
+  id: string;
+  officialName: string;
+};
+
+export type GovernmentServiceSource = {
+  reference: string;
+  type:
+    | "OFFICIAL_MANUAL_ENTRY"
+    | "OFFICIAL_SOURCE_REFERENCE"
+    | "APPROVED_IMPORT";
+  verifiedAt: string;
+};
+
+export type GovernmentServiceDetail = {
+  canonicalPath: string;
+  channels: GovernmentServiceChannel[];
+  description?: string | null;
+  eligibility: GovernmentServiceDetailItem[];
+  fees?: string | null;
+  id: string;
+  locale: string;
+  officialName: string;
+  officialNameEn?: string | null;
+  ownerEntity: GovernmentServiceOwner;
+  processingTime?: string | null;
+  publishedAt: string;
+  requirements: GovernmentServiceDetailItem[];
+  slug: string;
+  source: GovernmentServiceSource;
+  steps: GovernmentServiceDetailItem[];
+  summary: string;
+  updatedAt: string;
+};
+
 export const api = {
   login: (payload: AuthLoginRequest) =>
     request<AuthSession>("/api/auth/login", {
@@ -153,6 +203,10 @@ export const api = {
   getDocumentById: (id: number) => request<DocumentItem>(`/api/documents/${id}`),
   getGovernmentEntities: () =>
     request<GovernmentEntityItem[]>("/api/v1/entities"),
+  getGovernmentServiceBySlug: (slug: string) =>
+    request<GovernmentServiceDetail>(
+      `/api/v1/services/by-slug/${encodeURIComponent(slug)}`,
+    ),
   getPortalHome: () => request<PortalHomeContent>("/api/portal/home"),
   submitSupportRequest: (payload: SupportSubmission) =>
     request<SupportResponse>("/api/support/requests", {
