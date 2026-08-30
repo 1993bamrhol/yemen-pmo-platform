@@ -54,6 +54,7 @@ public class AdminSeedInitializer implements ApplicationRunner {
                 "content.publish", "content.archive", "content.manage",
                 "portal.publish", "portal.manage",
                 "entities.read", "entities.write", "entities.manage",
+                "services.read", "services.write", "services.publish", "services.manage",
                 "assignments.read", "assignments.write", "assignments.manage",
                 "users.read", "users.write", "users.manage",
                 "roles.read", "roles.write", "roles.manage",
@@ -81,12 +82,13 @@ public class AdminSeedInitializer implements ApplicationRunner {
         platformAdminRole = assignPermissions(platformAdminRole, Set.copyOf(requiredPermissions));
         ensureStandardRole("ENTITY_ADMIN", "Entity administrator", Set.of(
                 "entities.read", "entities.write", "assignments.read", "assignments.write",
-                "content.read", "content.write"));
+                "content.read", "content.write", "services.read", "services.write"));
         ensureStandardRole("EDITOR", "Content editor", Set.of("content.read", "content.write"));
         ensureStandardRole("REVIEWER", "Content reviewer", Set.of("content.read", "content.review"));
         ensureStandardRole("PUBLISHER", "Content publisher", Set.of(
                 "content.read", "content.approve", "content.publish", "content.archive", "portal.publish"));
-        ensureStandardRole("SERVICE_MANAGER", "Government service manager", Set.of("entities.read"));
+        ensureStandardRole("SERVICE_MANAGER", "Government service manager", Set.of(
+                "entities.read", "services.read", "services.write", "services.publish"));
 
         User adminUser;
         try {

@@ -279,7 +279,7 @@ public class GovernmentEntityService {
         return new EntityTypeResponse(type.getId(), type.getCode(), type.getNameAr(), type.getPublicPathSegment());
     }
 
-    private String canonicalPath(GovernmentEntity entity) {
+    public String canonicalPath(GovernmentEntity entity) {
         String segment = entity.getEntityType().getPublicPathSegment();
         return "PRIME_MINISTERS_OFFICE".equals(entity.getEntityType().getCode())
                 ? "/" + segment

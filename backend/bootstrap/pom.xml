@@ -67,6 +67,12 @@
 
         <dependency>
             <groupId>ye.gov.pmo</groupId>
+            <artifactId>services</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ye.gov.pmo</groupId>
             <artifactId>content</artifactId>
             <version>${project.version}</version>
         </dependency>

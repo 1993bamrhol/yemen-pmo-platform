@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         "ye.gov.pmo.identity.entity",
         "ye.gov.pmo.bootstrap.entity",
         "ye.gov.pmo.organization.entity",
+        "ye.gov.pmo.services.entity",
         "ye.gov.pmo.content.entity",
         "ye.gov.pmo.shared.audit"
 })
@@ -17,6 +18,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         "ye.gov.pmo.identity.repository",
         "ye.gov.pmo.bootstrap.repository",
         "ye.gov.pmo.organization.repository",
+        "ye.gov.pmo.services.repository",
         "ye.gov.pmo.content.repository",
         "ye.gov.pmo.shared.audit"
 })
