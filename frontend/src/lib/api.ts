@@ -131,6 +131,21 @@ export type GovernmentEntityItem = {
   websiteUrl?: string | null;
 };
 
+export type GovernmentEntityContact = {
+  address?: string | null;
+  email?: string | null;
+  phone?: string | null;
+};
+
+export type GovernmentEntityDetail = GovernmentEntityItem & {
+  contact?: GovernmentEntityContact | null;
+  locale: string;
+  mandate?: string | null;
+  officialNameEn?: string | null;
+  officialSourceReference?: string | null;
+  updatedAt: string;
+};
+
 export type GovernmentServiceDetailItem = {
   description?: string | null;
   order: number;
@@ -181,6 +196,27 @@ export type GovernmentServiceDetail = {
   updatedAt: string;
 };
 
+export type GovernmentServiceSummary = {
+  canonicalPath: string;
+  channels: GovernmentServiceChannel["type"][];
+  id: string;
+  locale: string;
+  officialName: string;
+  officialNameEn?: string | null;
+  ownerEntity: GovernmentServiceOwner;
+  slug: string;
+  summary: string;
+  updatedAt: string;
+};
+
+export type GovernmentServiceDirectory = {
+  items: GovernmentServiceSummary[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+};
+
 export const api = {
   login: (payload: AuthLoginRequest) =>
     request<AuthSession>("/api/auth/login", {
@@ -203,6 +239,14 @@ export const api = {
   getDocumentById: (id: number) => request<DocumentItem>(`/api/documents/${id}`),
   getGovernmentEntities: () =>
     request<GovernmentEntityItem[]>("/api/v1/entities"),
+  getGovernmentEntityBySlug: (publicPathSegment: string, slug: string) =>
+    request<GovernmentEntityDetail>(
+      `/api/v1/entities/by-slug/${encodeURIComponent(publicPathSegment)}/${encodeURIComponent(slug)}`,
+    ),
+  getGovernmentServicesForEntity: (entityId: string, page = 0, size = 12) =>
+    request<GovernmentServiceDirectory>(
+      `/api/v1/entities/${encodeURIComponent(entityId)}/services?page=${page}&size=${size}`,
+    ),
   getGovernmentServiceBySlug: (slug: string) =>
     request<GovernmentServiceDetail>(
       `/api/v1/services/by-slug/${encodeURIComponent(slug)}`,

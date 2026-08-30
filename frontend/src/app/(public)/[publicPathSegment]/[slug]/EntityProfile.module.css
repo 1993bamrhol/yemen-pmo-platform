@@ -1,0 +1,236 @@
+.page {
+  background: var(--yegov-color-bg-surface);
+  color: var(--yegov-color-text-primary);
+  min-inline-size: 0;
+}
+
+.hero {
+  background: var(--yegov-color-bg-interaction-subtle);
+  border-block-end: var(--yegov-border-width-default) solid
+    var(--yegov-color-border-subtle);
+  overflow: hidden;
+}
+
+.heroContainer {
+  display: grid;
+  gap: var(--yegov-space-xl);
+  padding-block: var(--yegov-space-xl) var(--yegov-space-4xl);
+  position: relative;
+}
+
+.identityCard {
+  align-content: start;
+  background: var(--yegov-color-bg-surface);
+  border: var(--yegov-border-width-default) solid var(--yegov-color-border-subtle);
+  border-radius: var(--yegov-radius-lg);
+  display: grid;
+  gap: var(--yegov-space-md);
+  min-inline-size: 0;
+  padding: var(--yegov-space-xl);
+  position: relative;
+  z-index: 1;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--yegov-space-sm);
+}
+
+.heroTitle,
+.englishName,
+.heroDescription,
+.profileText,
+.contactItem dt,
+.contactItem dd,
+.sourceDetails dt,
+.sourceDetails dd,
+.stateTitle {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.heroTitle {
+  font-size: clamp(2rem, 1.55rem + 2vw, 3rem);
+  font-weight: var(--yegov-font-weight-bold);
+  line-height: 1.35;
+  max-inline-size: 52rem;
+}
+
+.englishName {
+  color: var(--yegov-color-text-subtle);
+  font-family: var(--yegov-font-family-latin);
+  font-size: 1rem;
+  line-height: 1.75rem;
+  max-inline-size: 52rem;
+  text-align: start;
+}
+
+.heroDescription,
+.profileText {
+  color: var(--yegov-color-text-secondary);
+  font-size: 1rem;
+  line-height: 1.9;
+  max-inline-size: 52rem;
+  white-space: pre-line;
+}
+
+.websiteLink {
+  justify-self: start;
+  margin-block-start: var(--yegov-space-sm);
+}
+
+.heroMotif {
+  background: url("/icons/yegov-footer-arch-mobile.svg") center / contain
+    no-repeat;
+  block-size: 3.375rem;
+  inline-size: 6rem;
+  inset-block-start: var(--yegov-space-base);
+  inset-inline-start: var(--yegov-space-base);
+  opacity: 0.72;
+  pointer-events: none;
+  position: absolute;
+}
+
+.contactGrid {
+  display: grid;
+  gap: var(--yegov-layout-gutter-mobile);
+  margin: 0;
+  min-inline-size: 0;
+}
+
+.contactItem {
+  align-content: start;
+  background: var(--yegov-color-bg-surface);
+  border: var(--yegov-border-width-default) solid var(--yegov-color-border-default);
+  border-radius: var(--yegov-radius-lg);
+  display: grid;
+  gap: var(--yegov-space-base);
+  min-inline-size: 0;
+  padding: var(--yegov-space-xl);
+}
+
+.contactItem dt,
+.sourceDetails dt {
+  color: var(--yegov-color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: var(--yegov-font-weight-semibold);
+  line-height: 1.5rem;
+}
+
+.contactItem dd,
+.sourceDetails dd {
+  color: var(--yegov-color-text-primary);
+  font-size: 1rem;
+  line-height: 1.75rem;
+  min-inline-size: 0;
+}
+
+.contactItem dd > a {
+  justify-self: start;
+}
+
+.sourcePanel {
+  align-content: start;
+  background: var(--yegov-color-bg-surface);
+  border: var(--yegov-border-width-default) solid var(--yegov-color-border-default);
+  border-radius: var(--yegov-radius-lg);
+  display: grid;
+  gap: var(--yegov-space-xl);
+  min-inline-size: 0;
+  padding: var(--yegov-space-xl);
+}
+
+.sourceDetails {
+  margin: 0;
+  min-inline-size: 0;
+}
+
+.sourceDetails > div {
+  display: grid;
+  gap: var(--yegov-space-sm);
+  min-inline-size: 0;
+}
+
+.stateTitle {
+  font-size: clamp(1.75rem, 1.5rem + 1vw, 2.5rem);
+  line-height: 1.4;
+  margin-block-end: var(--yegov-space-xl);
+}
+
+.loadingState {
+  min-block-size: 24rem;
+}
+
+.visuallyHidden {
+  block-size: 1px;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  inline-size: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .heroContainer {
+    padding-block: var(--yegov-space-2xl) var(--yegov-space-5xl);
+  }
+
+  .identityCard {
+    padding: var(--yegov-space-2xl);
+  }
+
+  .heroMotif {
+    background-image: url("/icons/yegov-footer-arch-desktop.svg");
+    block-size: 7.5rem;
+    inline-size: 13.5rem;
+    inset-block-start: var(--yegov-space-xl);
+    inset-inline-start: var(--yegov-space-xl);
+  }
+
+  .contactGrid {
+    gap: var(--yegov-layout-gutter-tablet);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .heroContainer {
+    padding-block-end: var(--yegov-space-4xl);
+  }
+
+  .identityCard {
+    padding: var(--yegov-space-2xl) var(--yegov-space-4xl);
+  }
+
+  .contactGrid {
+    gap: var(--yegov-layout-gutter-desktop);
+  }
+}
+
+@media (max-width: 359px) {
+  .identityCard,
+  .contactItem,
+  .sourcePanel {
+    padding: var(--yegov-space-base);
+  }
+
+  .heroMotif {
+    opacity: 0.4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page {
+    scroll-behavior: auto;
+  }
+}
+
+@media (forced-colors: active) {
+  .identityCard,
+  .contactItem,
+  .sourcePanel {
+    border-color: CanvasText;
+  }
+}
