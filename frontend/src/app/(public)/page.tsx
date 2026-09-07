@@ -15,6 +15,15 @@ import { api } from "@/lib/api";
 
 import styles from "./Homepage.module.css";
 
+const SAFE_CANONICAL_PATH =
+  /^\/[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*)*$/;
+
+function trustedCanonicalPath(value: unknown): string | undefined {
+  return typeof value === "string" && SAFE_CANONICAL_PATH.test(value)
+    ? value
+    : undefined;
+}
+
 function SearchUnavailable() {
   return (
     <div className={styles.searchUnavailable}>
@@ -74,6 +83,7 @@ async function GovernmentEntitiesContent() {
       {activeEntities.map((entity) => (
         <GovernmentEntityCard
           entityType={entity.type?.name || undefined}
+          href={trustedCanonicalPath(entity.canonicalPath)}
           key={entity.id}
           name={entity.officialName}
           summary={entity.description || undefined}
