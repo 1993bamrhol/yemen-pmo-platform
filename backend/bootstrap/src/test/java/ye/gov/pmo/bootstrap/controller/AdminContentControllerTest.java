@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(classes = AdminContentControllerTest.TestApplication.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -58,6 +59,7 @@ class AdminContentControllerTest {
 
     @Test
     @Order(3)
+    @Transactional
     void createAndUpdateAndDeleteContent() throws Exception {
         mockMvc.perform(post("/api/admin/content")
                         .contentType(MediaType.APPLICATION_JSON)
