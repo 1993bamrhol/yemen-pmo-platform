@@ -247,6 +247,10 @@ export const api = {
     request<GovernmentServiceDirectory>(
       `/api/v1/entities/${encodeURIComponent(entityId)}/services?page=${page}&size=${size}`,
     ),
+  getGovernmentServices: (page = 0, size = 3) =>
+    request<GovernmentServiceDirectory>(
+      `/api/v1/services?page=${page}&size=${size}`,
+    ),
   getGovernmentServiceBySlug: (slug: string) =>
     request<GovernmentServiceDetail>(
       `/api/v1/services/by-slug/${encodeURIComponent(slug)}`,

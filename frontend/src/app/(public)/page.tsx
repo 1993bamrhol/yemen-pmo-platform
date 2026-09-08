@@ -4,6 +4,7 @@ import {
   CardGrid,
   ContentState,
   GovernmentEntityCard,
+  ServiceCard,
 } from "@/components/content";
 import {
   PageContainer,
@@ -45,6 +46,66 @@ function GovernmentEntitiesLoading() {
       label="جارٍ تحميل الجهات الحكومية"
       state="loading"
     />
+  );
+}
+
+function QuickServicesLoading() {
+  return (
+    <ContentState
+      itemCount={3}
+      label="جارٍ تحميل الخدمات الحكومية السريعة"
+      state="loading"
+    />
+  );
+}
+
+async function QuickServicesContent() {
+  const result = await loadGovernmentServices();
+
+  if (!result.ok) {
+    return (
+      <ContentState
+        description="تعذر الوصول إلى دليل الخدمات. يمكن متابعة بقية الصفحة بصورة مستقلة."
+        state="error"
+        title="تعذر تحميل الخدمات الحكومية"
+      />
+    );
+  }
+
+  const services = (result.data.items ?? []).flatMap((service) => {
+    const href = trustedCanonicalPath(service.canonicalPath);
+    const title = service.officialName?.trim();
+
+    if (!href || !title) {
+      return [];
+    }
+
+    return [{ href, service, title }];
+  });
+
+  if (!services.length) {
+    return (
+      <ContentState
+        description="لم يُرجع دليل الخدمات أي خدمة عامة منشورة ومعتمدة قابلة للعرض."
+        state="empty"
+        title="لا توجد خدمات معتمدة حاليًا"
+      />
+    );
+  }
+
+  return (
+    <CardGrid>
+      {services.map(({ href, service, title }) => (
+        <ServiceCard
+          actionLabel="عرض تفاصيل الخدمة"
+          description={service.summary?.trim() || undefined}
+          href={href}
+          key={service.id}
+          providerName={service.ownerEntity?.officialName || undefined}
+          title={title}
+        />
+      ))}
+    </CardGrid>
   );
 }
 
@@ -104,6 +165,17 @@ async function loadGovernmentEntities() {
   }
 }
 
+async function loadGovernmentServices() {
+  try {
+    return {
+      data: await api.getGovernmentServices(),
+      ok: true as const,
+    };
+  } catch {
+    return { ok: false as const };
+  }
+}
+
 export default function HomePage() {
   return (
     <>
@@ -129,15 +201,13 @@ export default function HomePage() {
 
       <Section aria-labelledby="services-heading" spacing="roomy">
         <SectionHeader
-          description="سيظهر دليل الخدمات هنا بعد اعتماد مصدر بيانات حكومي موثوق."
+          description="خدمات حكومية عامة منشورة ومعتمدة من مصادر رسمية."
           headingId="services-heading"
           title="خدمات حكومية سريعة"
         />
-        <ContentState
-          description="لا توجد واجهة بيانات معتمدة للخدمات الحكومية في هذا الإصدار، لذلك لم تُعرض بطاقات توضيحية."
-          state="empty"
-          title="دليل الخدمات غير متاح حاليًا"
-        />
+        <Suspense fallback={<QuickServicesLoading />}>
+          <QuickServicesContent />
+        </Suspense>
       </Section>
 
       <Section
