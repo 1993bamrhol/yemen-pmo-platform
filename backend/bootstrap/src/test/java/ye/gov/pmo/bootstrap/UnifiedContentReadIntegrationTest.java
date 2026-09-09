@@ -7,18 +7,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.UUID;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Transactional
 class UnifiedContentReadIntegrationTest {
 
     private static final UUID PMO_ID = UUID.fromString("00000000-0000-0000-0000-000000000001");
@@ -30,7 +30,7 @@ class UnifiedContentReadIntegrationTest {
     @Autowired private MockMvc mockMvc;
     @Autowired private JdbcTemplate jdbcTemplate;
 
-    @BeforeAll
+    @BeforeEach
     void insertFixtures() {
         Timestamp publishedAt = Timestamp.from(Instant.parse("2026-08-20T09:00:00Z"));
         jdbcTemplate.update("""
