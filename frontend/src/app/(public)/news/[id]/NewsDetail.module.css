@@ -1,0 +1,154 @@
+.page {
+  background: var(--yegov-color-bg-surface);
+  color: var(--yegov-color-text-primary);
+  min-inline-size: 0;
+}
+
+.container {
+  display: grid;
+  gap: var(--yegov-space-2xl);
+  padding-block: var(--yegov-space-xl) var(--yegov-space-4xl);
+}
+
+.header {
+  display: grid;
+  gap: var(--yegov-space-base);
+  min-inline-size: 0;
+}
+
+.header > :first-child {
+  inline-size: max-content;
+  max-inline-size: 100%;
+}
+
+.title,
+.summary,
+.legacyBody p,
+.stateTitle {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.title {
+  font-size: clamp(2rem, 1.55rem + 2vw, 3rem);
+  font-weight: var(--yegov-font-weight-bold);
+  line-height: 1.4;
+  max-inline-size: 52rem;
+}
+
+.summary {
+  color: var(--yegov-color-text-secondary);
+  font-size: 1.125rem;
+  line-height: 2;
+  max-inline-size: 48rem;
+}
+
+.body,
+.legacyBody {
+  background: var(--yegov-color-bg-surface);
+  border-block-start: var(--yegov-border-width-default) solid
+    var(--yegov-color-border-subtle);
+  color: var(--yegov-color-text-primary);
+  font-size: 1.0625rem;
+  line-height: 2;
+  max-inline-size: 52rem;
+  min-inline-size: 0;
+  padding-block-start: var(--yegov-space-2xl);
+}
+
+.body :where(h2, h3, h4, p, ul, ol, blockquote),
+.legacyBody p {
+  overflow-wrap: anywhere;
+}
+
+.body > :first-child,
+.legacyBody > :first-child {
+  margin-block-start: 0;
+}
+
+.body > :last-child,
+.legacyBody > :last-child {
+  margin-block-end: 0;
+}
+
+.body :where(h2, h3, h4) {
+  line-height: 1.5;
+  margin-block: var(--yegov-space-2xl) var(--yegov-space-base);
+}
+
+.body :where(p, ul, ol, blockquote) {
+  margin-block: 0 var(--yegov-space-xl);
+}
+
+.body :where(ul, ol) {
+  padding-inline-start: var(--yegov-space-2xl);
+}
+
+.body a {
+  color: var(--yegov-color-text-link);
+  font-weight: var(--yegov-font-weight-semibold);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.body a:hover {
+  color: var(--yegov-color-text-link-hover);
+}
+
+.body a:active {
+  color: var(--yegov-color-text-link-active);
+}
+
+.body blockquote {
+  border-inline-start: var(--yegov-border-width-default) solid
+    var(--yegov-color-action-secondary-border);
+  color: var(--yegov-color-text-secondary);
+  padding-inline-start: var(--yegov-space-xl);
+}
+
+.stateTitle {
+  font-size: clamp(1.75rem, 1.5rem + 1vw, 2.5rem);
+  line-height: 1.4;
+  margin-block-end: var(--yegov-space-xl);
+}
+
+.loadingState {
+  min-block-size: 24rem;
+}
+
+.visuallyHidden {
+  block-size: 1px;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  inline-size: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .container {
+    gap: var(--yegov-space-3xl);
+    padding-block: var(--yegov-space-2xl) var(--yegov-space-5xl);
+  }
+}
+
+@media (max-width: 359px) {
+  .container {
+    gap: var(--yegov-space-xl);
+    padding-block-end: var(--yegov-space-3xl);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page {
+    scroll-behavior: auto;
+  }
+}
+
+@media (forced-colors: active) {
+  .body,
+  .legacyBody {
+    border-color: CanvasText;
+  }
+}

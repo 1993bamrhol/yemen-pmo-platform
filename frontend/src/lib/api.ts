@@ -83,6 +83,23 @@ export type NewsItem = {
   excerpt: string;
 };
 
+export type PublicNewsDetail = {
+  id: string;
+  slug: string;
+  canonicalPath: string;
+  title: string;
+  body: string;
+  summary?: string | null;
+  byline?: string | null;
+  publishedAt: string;
+  primaryEntity?: {
+    officialName: string;
+  } | null;
+  categories: Array<{
+    label: string;
+  }>;
+};
+
 export type AnnouncementItem = {
   id?: number;
   title: string;
@@ -231,6 +248,10 @@ export const api = {
   getPermissions: () => request<unknown[]>("/api/permissions"),
   getNews: () => request<NewsItem[]>("/api/news"),
   getNewsById: (id: number) => request<NewsItem>(`/api/news/${id}`),
+  getPublicNewsBySlug: (slug: string) =>
+    request<PublicNewsDetail>(
+      `/api/v1/content/by-slug/NEWS/${encodeURIComponent(slug)}`,
+    ),
   getAnnouncements: () => request<AnnouncementItem[]>("/api/announcements"),
   getAnnouncementById: (id: number) => request<AnnouncementItem>(`/api/announcements/${id}`),
   getDecisions: () => request<DecisionItem[]>("/api/decisions"),
