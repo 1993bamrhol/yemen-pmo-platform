@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import ye.gov.pmo.content.config.PublicContentReadPolicy;
 import ye.gov.pmo.content.domain.ContentType;
 import ye.gov.pmo.content.dto.PageResponse;
 import ye.gov.pmo.content.dto.PublicContentResponse;
@@ -37,40 +39,52 @@ public class PublicContentService {
 
     private final ContentItemRepository contentRepository;
     private final ContentTaxonomyAssignmentRepository taxonomyRepository;
+    private final PublicContentReadPolicy publicReadPolicy;
 
     public PublicContentService(ContentItemRepository contentRepository,
-                                ContentTaxonomyAssignmentRepository taxonomyRepository) {
+                                ContentTaxonomyAssignmentRepository taxonomyRepository,
+                                PublicContentReadPolicy publicReadPolicy) {
         this.contentRepository = contentRepository;
         this.taxonomyRepository = taxonomyRepository;
+        this.publicReadPolicy = publicReadPolicy;
     }
 
     public PageResponse<PublicContentResponse> findPublished(
             String type, UUID entityId, String category, LocalDate dateFrom, LocalDate dateTo,
             int page, int size) {
-        return findPublished(type, entityId, category, dateFrom, dateTo, page, size, true);
+        return findPublished(type, entityId, category, dateFrom, dateTo, page, size, true,
+                publicReadPolicy.publicTypes());
     }
 
     public PageResponse<PublicContentResponse> findPublishedForCompatibility(
             String type, int page, int size) {
-        return findPublished(type, null, null, null, null, page, size, false);
+        return findPublished(type, null, null, null, null, page, size, false, null);
     }
 
     private PageResponse<PublicContentResponse> findPublished(
             String type, UUID entityId, String category, LocalDate dateFrom, LocalDate dateTo,
-            int page, int size, boolean requireEditorialVerification) {
+            int page, int size, boolean requireEditorialVerification,
+            Set<ContentType> allowedContentTypes) {
         validatePage(page, size);
         if (dateFrom != null && dateTo != null && dateTo.isBefore(dateFrom)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "dateTo must not be before dateFrom");
         }
         ContentType contentType = parseType(type);
         String categorySlug = normalizeCategory(category);
+        if (allowedContentTypes != null && contentType != null
+                && !allowedContentTypes.contains(contentType)) {
+            throw notFound();
+        }
+        if (allowedContentTypes != null && allowedContentTypes.isEmpty()) {
+            return new PageResponse<>(List.of(), page, size, 0, 0);
+        }
         OffsetDateTime from = dateFrom == null ? null : dateFrom.atStartOfDay().atOffset(ZoneOffset.UTC);
         OffsetDateTime toExclusive = dateTo == null
                 ? null
                 : dateTo.plusDays(1).atStartOfDay().atOffset(ZoneOffset.UTC);
         Page<ContentItem> result = contentRepository.findAll(
                 publishedSpecification(contentType, entityId, categorySlug, from, toExclusive,
-                        requireEditorialVerification),
+                        requireEditorialVerification, allowedContentTypes),
                 PageRequest.of(page, size, org.springframework.data.domain.Sort.by(
                         org.springframework.data.domain.Sort.Order.desc("lastPublishedAt"),
                         org.springframework.data.domain.Sort.Order.desc("id"))));
@@ -84,6 +98,7 @@ public class PublicContentService {
     public PublicContentResponse findById(UUID id) {
         ContentItem item = contentRepository.findPublicById(id)
                 .orElseThrow(() -> notFound());
+        requireAllowed(item.getContentType());
         return toResponse(item, categoriesFor(List.of(item)).getOrDefault(id, List.of()));
     }
 
@@ -96,6 +111,7 @@ public class PublicContentService {
     public PublicContentResponse findBySlug(String type, String slug) {
         ContentType contentType = requireType(type);
         String normalizedSlug = normalizeSlug(slug);
+        requireAllowed(contentType);
         ContentItem item = contentRepository.findPublicBySlug(contentType, "ar", normalizedSlug)
                 .orElseThrow(() -> notFound());
         return toResponse(item, categoriesFor(List.of(item)).getOrDefault(item.getId(), List.of()));
@@ -116,7 +132,7 @@ public class PublicContentService {
     private Specification<ContentItem> publishedSpecification(
             ContentType contentType, UUID entityId, String categorySlug,
             OffsetDateTime publishedFrom, OffsetDateTime publishedToExclusive,
-            boolean requireEditorialVerification) {
+            boolean requireEditorialVerification, Set<ContentType> allowedContentTypes) {
         return (root, query, criteria) -> {
             List<jakarta.persistence.criteria.Predicate> predicates = new ArrayList<>();
             predicates.add(criteria.isNotNull(root.get("publishedRevision")));
@@ -129,6 +145,9 @@ public class PublicContentService {
             }
             if (contentType != null) {
                 predicates.add(criteria.equal(root.get("contentType"), contentType));
+            }
+            if (allowedContentTypes != null) {
+                predicates.add(root.get("contentType").in(allowedContentTypes));
             }
             if (entityId != null) {
                 predicates.add(criteria.equal(root.get("primaryEntity").get("id"), entityId));
@@ -208,6 +227,12 @@ public class PublicContentService {
             return ContentType.valueOf(value.trim().toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException exception) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported content type");
+        }
+    }
+
+    private void requireAllowed(ContentType contentType) {
+        if (!publicReadPolicy.allows(contentType)) {
+            throw notFound();
         }
     }
 

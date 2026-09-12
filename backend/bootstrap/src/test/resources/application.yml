@@ -27,6 +27,7 @@ app:
 features:
   unified-content-read:
     enabled: true
+    allowed-types: NEWS,ANNOUNCEMENT,DECISION,DOCUMENT
   unified-content-backfill-apply:
     enabled: true
   unified-content-compatibility:

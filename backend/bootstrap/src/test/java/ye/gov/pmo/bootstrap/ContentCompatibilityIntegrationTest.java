@@ -23,6 +23,7 @@ import ye.gov.pmo.news.service.NewsQuery;
 import ye.gov.pmo.news.service.NewsService;
 
 @SpringBootTest(properties = {
+        "features.unified-content-read.allowed-types=NEWS",
         "features.unified-content-compatibility.news-enabled=true",
         "features.unified-content-compatibility.announcements-enabled=true",
         "features.unified-content-compatibility.decisions-enabled=true",

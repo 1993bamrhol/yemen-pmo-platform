@@ -42,6 +42,7 @@ app:
 features:
   unified-content-read:
     enabled: ${FEATURE_UNIFIED_CONTENT_READ_ENABLED:false}
+    allowed-types: "${FEATURE_UNIFIED_CONTENT_READ_ALLOWED_TYPES:}"
   unified-content-backfill-apply:
     enabled: ${FEATURES_UNIFIED_CONTENT_BACKFILL_APPLY_ENABLED:false}
   unified-content-compatibility:
